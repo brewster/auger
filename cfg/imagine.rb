@@ -16,7 +16,7 @@ project "Imagine" do
         r.code == '200'
       end
       test "Status Page" do |r|
-        r.body.match /ok/
+        r.body.match /(ok)/
       end
     end
   end
