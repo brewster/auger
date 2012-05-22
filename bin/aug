@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+
+## relative path to libs
+HOME = File.dirname(File.dirname(__FILE__))
+
+require "rainbow"
+require "#{HOME}/lib/auger"
+
+## load plugins
+Dir["#{HOME}/lib/plugins/*.rb"].each {|file| require file }
+
+## cfg file can be e.g. 'imagine' or relative path
+cfg = File.exists?(ARGV[0]) ? ARGV[0] : "#{HOME}/cfg/#{ARGV[0]}.rb"
+
+Auger::Config.load(cfg).projects.each do |p|
+
+  p.hosts.each do |host|
+    puts "[#{host.color(:cyan)}]"
+
+    p.connections.each do |c|
+
+      begin 
+        c.do_requests(host)
+      rescue => e               # connection failure
+        puts "#{c.class}:#{c.port} #{e.class}: #{e.message.color(:red)}"
+      else
+        results = c.do_tests
+        results.flatten.each do |result|
+          color = result.outcome ? :green : :red
+          puts "  %+30s  %-30s" % [result.test.name, result.to_s.color(color)]
+        end
+      end
+
+    end
+
+  end
+
+end
