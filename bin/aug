@@ -10,13 +10,14 @@ require "#{HOME}/lib/auger"
 
 options = {}
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: aug {-h|--help} [cfg]"
+  opts.banner = "Usage: aug [-h|--help] [-f|--fqdn] cfg"
 
   if ARGV[0] == nil
     puts opts.banner.color(:yellow)
     exit
   end
 
+  opts.on('-f', '--fqdn', 'Test FQDN/VIPs instead of hosts.') { options[:fqdn] = true }
   opts.on('-h', '--help', 'Display help') do
     puts opts
     exit
@@ -33,7 +34,9 @@ cfg = File.exists?(ARGV[0]) ? ARGV[0] : "#{HOME}/cfg/#{ARGV[0]}.rb"
 
 Auger::Config.load(cfg).projects.each do |p|
 
-  p.hosts.each do |host|
+  hostlist = options[:fqdn] ? p.fqdns : p.hosts
+  
+  hostlist.each do |host|
     puts "[#{host.color(:cyan)}]"
 
     p.connections.each do |c|
