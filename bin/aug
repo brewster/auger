@@ -5,7 +5,25 @@
 HOME = File.dirname(File.dirname(__FILE__))
 
 require "rainbow"
+require 'optparse'
 require "#{HOME}/lib/auger"
+
+options = {}
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: aug {-h|--help} [cfg]"
+
+  if ARGV[0] == nil
+    puts opts.banner.color(:yellow)
+    exit
+  end
+
+  opts.on('-h', '--help', 'Display help') do
+    puts opts
+    exit
+  end
+end
+optparse.parse!
+
 
 ## load plugins
 Dir["#{HOME}/lib/plugins/*.rb"].each {|file| require file }
