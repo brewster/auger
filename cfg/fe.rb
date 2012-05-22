@@ -1,6 +1,6 @@
 project "Front-End Nginx" do
   fqdns "www.brewster.com"
-  hosts "prod-fe-r[01-02]"
+  hosts "prod-fe-r[01-04]"
 
   http 80 do
     get "/users/sign_in" do
