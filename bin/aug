@@ -5,7 +5,7 @@
 HOME = File.dirname(File.dirname(__FILE__))
 
 require "rainbow"
-require 'optparse'
+require "optparse"
 require "#{HOME}/lib/auger"
 
 options = {}
