@@ -20,6 +20,12 @@ project "Front-End Nginx" do
   https 443 do
     insecure true
 
+    get "/_vip_/healthcheck.html" do
+      test "VIP Healthcheck" do |r|
+        response.body.match /ok/
+      end
+    end
+
     get "/" do
       header "Location: www.brewster.com"
 
@@ -31,14 +37,14 @@ project "Front-End Nginx" do
   end
 
   ## example telnet request
-  telnet 80 do
-    timeout "3"
-    binmode false
-    
-    cmd "HEAD / HTTP/1.1\n\n" do
-      test "Telnet Port 80" do |r|
-        r.match /Server: (nginx\/[\d\.]+)/
-      end
-    end
-  end
+  #telnet 80 do
+  #  timeout "3"
+  #  binmode false
+  #  
+  #  cmd "HEAD / HTTP/1.1\n\n" do
+  #    test "Telnet Port 80" do |r|
+  #      r.match /Server: (nginx\/[\d\.]+)/
+  #    end
+  #  end
+  #end
 end
