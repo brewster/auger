@@ -26,11 +26,12 @@ project "Elasticsearch" do
   http 9200 do
 ```
 
->>>> We'll require json for this particular test (as the elasticsearch api outputs in json)
->>>> The project name is defined, then we specify the hosts we're going to test, which 
->>>>>> can be a regex, for example ```hosts elasticsearch-d[01-08]```
->>>> The protocol is http, port 9200... pretty easy so far.
-  
+> We'll require json for this particular test (as the elasticsearch api outputs in json)
+> The project name is defined, then we specify the hosts we're going to test, which 
+> can be a regex, for example ```hosts elasticsearch-d[01-08]```
+> The protocol is http, port 9200... pretty easy so far.
+
+    ```ruby  
     get "/_cluster/health" do
 
       # this runs after request returns, but before tests
@@ -44,11 +45,15 @@ project "Elasticsearch" do
           end
         end
       end
+      ```
 
+      ```ruby
       test "Status 200" do |r|
         r.code == '200'
       end
+      ```
 
+      ```ruby
       stats = %w[
         cluster_name
         status
