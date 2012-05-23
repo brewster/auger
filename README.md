@@ -15,12 +15,12 @@
       augcfgs=$(aug -l|xargs) local word=${COMP_WORDS[COMP_CWORD]}
       COMPREPLY=($(compgen -W "$augcfgs" -- "${word}"))
     }
-    complete -F _augcomp aug```
+    complete -F _augcomp aug
 
 
 * ZSH completion:
     _augprojects () {
       compadd $(aug -l)
     }
-    compdef _augprojects aug```
+    compdef _augprojects aug
 
