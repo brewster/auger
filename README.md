@@ -11,6 +11,7 @@
 
 ## Command Line Completion
 * BASH completion:
+
         function _augcomp () {
           augcfgs=$(aug -l|xargs) local word=${COMP_WORDS[COMP_CWORD]}
           COMPREPLY=($(compgen -W "$augcfgs" -- "${word}"))
@@ -19,6 +20,7 @@
 
 
 * ZSH completion:
+
         _augprojects () {
           compadd $(aug -l)
         }
