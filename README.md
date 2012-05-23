@@ -16,7 +16,14 @@
 
 ## Configuration Examples
 * please see cfg/examples for some included tests that you can make use of and learn from to write your own
-* to run through an example, let's take a look at the included elasticsearch.rb
+* to run through an example, let's take a look at the included elasticsearch.rb  
+  
+
+> We'll require json for this particular test (as the elasticsearch api outputs in json)
+> The project name is defined, then we specify the hosts we're going to test, which 
+> can be a regex, for example ```hosts elasticsearch-d[01-08]```
+> The protocol is http, port 9200... pretty easy so far.  
+  
 
 ```ruby
 require 'json'
@@ -26,12 +33,8 @@ project "Elasticsearch" do
   http 9200 do
 ```
 
-> We'll require json for this particular test (as the elasticsearch api outputs in json)
-> The project name is defined, then we specify the hosts we're going to test, which 
-> can be a regex, for example ```hosts elasticsearch-d[01-08]```
-> The protocol is http, port 9200... pretty easy so far.
 
-
+> 
 ```ruby  
     get "/_cluster/health" do
 
@@ -106,7 +109,7 @@ end
 ```
 
 
-## Command Line Auto-completion
+## Command Line Auto-completion for Tests
 * BASH completion:
 
         function _augcomp () {
