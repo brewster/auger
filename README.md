@@ -31,7 +31,8 @@ project "Elasticsearch" do
 > can be a regex, for example ```hosts elasticsearch-d[01-08]```
 > The protocol is http, port 9200... pretty easy so far.
 
-    ```ruby  
+
+```ruby  
     get "/_cluster/health" do
 
       # this runs after request returns, but before tests
@@ -45,15 +46,17 @@ project "Elasticsearch" do
           end
         end
       end
-      ```
+```
 
-      ```ruby
+
+```ruby
       test "Status 200" do |r|
         r.code == '200'
       end
-      ```
+```
 
-      ```ruby
+
+```ruby
       stats = %w[
         cluster_name
         status
@@ -101,6 +104,7 @@ project "Elasticsearch" do
   end
 end
 ```
+
 
 ## Command Line Auto-completion
 * BASH completion:
