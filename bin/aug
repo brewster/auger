@@ -1,15 +1,16 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
-## relative path to libs
 AUGER_DIR = File.dirname(File.dirname(__FILE__))
-
-## cfg dir
+AUGER_LIB = File.join(AUGER_DIR, 'lib')
 AUGER_CFG = ENV['AUGER_CFG'] || File.join(AUGER_DIR, 'cfg')
+
+## relative path to libs
+$LOAD_PATH.unshift(AUGER_LIB) unless $LOAD_PATH.include?(AUGER_LIB)
 
 require "rainbow"
 require "optparse"
-require "#{AUGER_DIR}/lib/auger"
+require "auger"
 
 options = {}
 optparse = OptionParser.new do |opts|
