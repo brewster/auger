@@ -1,28 +1,26 @@
 # Auger
 
 ## Overview
+------------
 * auger is DSL with which you can write tests for just about everything you run in your environment
 * it's like magic pixie dust for IBM servers...
 
 ## Usage
+------------
 * the binary, aug, should be placed in your PATH, or aliased: ```alias aug="/path/to/auger/bin/aug"```
 * sample configs included in examples/ can be moved into cfg/ and then run via ```aug redis```, etc. Edit as required for your env
 * alternatively, you can place your configs anywhere you'd like and set the env_var AUGER_CFG=/path/to/your/configs
 * then, you can call your tests via ```aug cfg```
 
 ## Command Line Options
+------------
 * ```aug -l``` will print available tests
 * ```aug -h``` will print usage details
 
 ## Configuration Examples
+------------
 * please see cfg/examples for some included tests that you can make use of and learn from to write your own
-* to run through an example, let's take a look at the included elasticsearch.rb  
-  
-
-> We'll require json for this particular test (as the elasticsearch api outputs in json)
-> The project name is defined, then we specify the hosts we're going to test, which 
-> can be a regex, for example ```hosts elasticsearch-d[01-08]```
-> The protocol is http, port 9200... pretty easy so far.  
+* to run through an example, let's take a look at the included elasticsearch.rb
   
 
 ```ruby
@@ -32,9 +30,12 @@ project "Elasticsearch" do
   hosts "localhost"
   http 9200 do
 ```
+> We'll require json for this particular test (as the elasticsearch api outputs in json)
+> The project name is defined, then we specify the hosts we're going to test, which 
+> can be a regex, for example ```hosts elasticsearch-d[01-08]```
+> The protocol is http, port 9200... pretty easy so far.  
 
 
-> 
 ```ruby  
     get "/_cluster/health" do
 
