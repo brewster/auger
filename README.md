@@ -88,7 +88,7 @@
               end
             end
           end
-        end```
+        end
 
 ## Command Line Auto-completion
 * BASH completion:
