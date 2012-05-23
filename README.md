@@ -5,10 +5,11 @@
 * it's like magic pixie dust for IBM servers...
 
 ### Usage
-* the binary, aug, should be placed in your PATH, or aliased: ```alias aug="/path/to/auger/bin/aug"```
+* the binary, aug, can be placed in your PATH, or aliased: ```alias aug="/path/to/auger/bin/aug"``` (although not required)
 * sample configs included in examples/ can be moved into cfg/ and then run via ```aug redis```, etc. Edit as required for your env
 * alternatively, you can place your configs anywhere you'd like and set the env_var AUGER_CFG=/path/to/your/configs
 * then, you can call your tests via ```aug cfg```
+* if you'd like to use some more of the advanced plugins such as for cassandra, be sure to ```bundle install```
 
 ### Command Line Options
 * ```aug -l``` will print available tests
@@ -116,7 +117,12 @@ end
 ```
 
 
-## Command Line Auto-completion for Tests
+### Push Requests
+* yes please
+* new plugins and genereal bug fixes, updates, etc are all welcome
+
+
+### Command Line Auto-completion for Tests
 * BASH completion:
 
         function _augcomp () {
