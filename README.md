@@ -117,7 +117,7 @@ end
 ```
 
 
-### Push Requests
+### Pull Requests
 * yes please
 * new plugins and genereal bug fixes, updates, etc are all welcome
 
