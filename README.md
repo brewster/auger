@@ -11,16 +11,18 @@
 
 ## Command Line Completion
 * BASH completion:
-        ```function _augcomp () {
-              augcfgs=$(aug -l|xargs) local word=${COMP_WORDS[COMP_CWORD]}
-              COMPREPLY=($(compgen -W "$augcfgs" -- "${word}"))
-           }
-            complete -F _augcomp aug```
+```bash
+function _augcomp () {
+  augcfgs=$(aug -l|xargs) local word=${COMP_WORDS[COMP_CWORD]}
+  COMPREPLY=($(compgen -W "$augcfgs" -- "${word}"))
+}
+complete -F _augcomp aug```
 
 
 * ZSH completion:
-        ```_augprojects () {
-            compadd $(aug -l)
-           }
-            compdef _augprojects aug```
+```zsh
+_augprojects () {
+  compadd $(aug -l)
+}
+compdef _augprojects aug```
 
