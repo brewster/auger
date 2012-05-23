@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 
 ## relative path to libs
-HOME = File.dirname(File.dirname(__FILE__))
+AUGER_DIR = File.dirname(File.dirname(__FILE__))
+
+## cfg dir
+AUGER_CFG = ENV['AUGER_CFG'] || File.join(AUGER_DIR, 'cfg')
 
 require "rainbow"
 require "optparse"
-require "#{HOME}/lib/auger"
+require "#{AUGER_DIR}/lib/auger"
 
 options = {}
 optparse = OptionParser.new do |opts|
@@ -19,7 +22,7 @@ optparse = OptionParser.new do |opts|
 
   opts.on('-f', '--fqdn', 'Test FQDN/VIPs instead of hosts.') { options[:fqdn] = true }
   opts.on('-l', '--list', 'List available configs and exit.') do
-    puts Dir["#{HOME}/cfg/*.rb"].map {|file| File.basename(file).sub(/\.rb$/, '')}
+    puts Dir["#{AUGER_CFG}/*.rb"].map {|file| File.basename(file).sub(/\.rb$/, '')}
     exit
   end
   opts.on('-h', '--help', 'Display help') do
@@ -31,10 +34,10 @@ optparse.parse!
 
 
 ## load plugins
-Dir["#{HOME}/lib/plugins/*.rb"].each {|file| require file }
+Dir["#{AUGER_DIR}/lib/plugins/*.rb"].each {|file| require file }
 
 ## cfg file can be e.g. 'imagine' or relative path
-cfg = File.exists?(ARGV[0]) ? ARGV[0] : "#{HOME}/cfg/#{ARGV[0]}.rb"
+cfg = File.exists?(ARGV[0]) ? ARGV[0] : "#{AUGER_CFG}/#{ARGV[0]}.rb"
 
 Auger::Config.load(cfg).projects.each do |p|
 
