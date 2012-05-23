@@ -1,0 +1,3 @@
+[submodule "cfg"]
+	path = cfg
+	url = root@git-r01:/var/cache/git/auger_cfg.git
