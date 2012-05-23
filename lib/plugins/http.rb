@@ -3,11 +3,11 @@ require "net/http"
 module Auger
 
   class Project
-    def http(port, &block)
+    def http(port = 80, &block)
       @connections << Http.load(port, &block)
     end
     
-    def https(port, &block)
+    def https(port = 443, &block)
       http = Http.load(port, &block)
       http.ssl(true)
       @connections << http

@@ -2,7 +2,7 @@ require 'net/telnet'
 
 module Auger
   class Project
-    def telnet(port, &block)
+    def telnet(port = 23, &block)
       @connections << Telnet.load(port, &block)
     end
   end

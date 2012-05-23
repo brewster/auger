@@ -3,7 +3,7 @@ require 'cassandra-cql'
 module Auger
   
   class Project
-    def cql(port, &block)
+    def cql(port = 9160, &block)
       @connections << Cql.load(port, &block)
     end
   end
