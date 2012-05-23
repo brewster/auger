@@ -1,8 +1,8 @@
 Sample configs included in examples/ can be moved into cfg/
-and then run via 'aug redis', etc.
+and then run via 'aug redis', etc. Edit as required for your env.
 
 Alternatively, you can place your configs anywhere you'd like and
-set the env_var AUGER_CFG.
+set the env_var AUGER_CFG=/path/to/your/configs.
 
 
 BASH completion:
@@ -21,3 +21,4 @@ _augprojects () {
   compadd $(aug -l)
 }
 compdef _augprojects aug
+
