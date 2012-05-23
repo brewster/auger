@@ -18,6 +18,10 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('-f', '--fqdn', 'Test FQDN/VIPs instead of hosts.') { options[:fqdn] = true }
+  opts.on('-l', '--list', 'List available configs and exit.') do
+    puts Dir["#{HOME}/cfg/*.rb"].map {|file| File.basename(file).sub(/\.rb$/, '')}
+    exit
+  end
   opts.on('-h', '--help', 'Display help') do
     puts opts
     exit
