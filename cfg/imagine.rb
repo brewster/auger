@@ -7,7 +7,7 @@ project "Imagine" do
 
     get "/" do
       test "Version" do |r|
-        r.body.match /"version":"(0.0.1)"/
+        r.body.match /"version":"(\d+.\d+.\d+)"/
       end
     end
 
@@ -21,3 +21,4 @@ project "Imagine" do
     end
   end
 end
+
