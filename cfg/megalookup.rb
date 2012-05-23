@@ -37,18 +37,39 @@ project "Megalookup" do
       ]
 
       lookups.each do |lookup|
-        test "#{lookup} last successful response" do |r|
+        test "#{lookup} - last_successful_response" do |r|
           if r.body.is_a? Hash
             r.body['lookups'][lookup]['last_successful_response']
           else
             false
           end
         end
+        test "#{lookup} - rate_limited_requests" do |r|
+          if r.body.is_a? Hash
+            r.body['lookups'][lookup]['rate_limited_requests']
+          else
+            false
+          end
+        end
+        test "#{lookup} - input_queue_count" do |r|
+          if r.body.is_a? Hash
+            r.body['lookups'][lookup]['input_queue_count']
+          else
+            false
+          end
+        end
+        test "#{lookup} - cache hit rate %" do |r|
+          if r.body.is_a? Hash
+            hit = r.body['lookups'][lookup]['cache_hits']
+            miss = r.body['lookups'][lookup]['cache_misses']
+            hitrate = (hit.to_f / (hit.to_f + miss.to_f)) * 100
+            Integer(hitrate * 100) / Float(100)
+          else
+            false
+          end
+        end
       end
-
     end
-
   end
-
 end
 
