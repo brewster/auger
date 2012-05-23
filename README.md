@@ -2,7 +2,12 @@
 
 ### Overview
 * auger is DSL with which you can write tests for just about everything you run in your environment
-* it's like magic pixie dust for IBM servers...
+
+### Currently Supported Plugins
+* HTTP(S)
+* Telnet
+* Socket (basic connectivity)
+* Cassandra
 
 ### Usage
 * the binary, aug, can be placed in your PATH, or aliased: ```alias aug="/path/to/auger/bin/aug"``` (although not required)
