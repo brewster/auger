@@ -29,7 +29,7 @@ project "Megalookup" do
       }
 
       t.each do |name, test|
-        test "#{name}\t\t - #{test}" do |r|
+        test "#{name} - #{test}" do |r|
           h = JSON.parse(r.body)
           "#{h['lookups']["#{name}"]["#{test}"]}"
         end
