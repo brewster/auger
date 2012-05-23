@@ -6,8 +6,8 @@ project "Elasticsearch" do
   http 9200 do
     get "/_cluster/health" do
 
-      ## this runs after request returns, but before tests
-      ## use it to munge response body from json string into a hash
+      # this runs after request returns, but before tests
+      # use it to munge response body from json string into a hash
       before_tests do |r|
         if r['Content-Type'].respond_to?(:match) and r['Content-Type'].match /application\/json/
           begin 
@@ -42,6 +42,27 @@ project "Elasticsearch" do
           else
             false
           end
+        end
+      end
+
+      # I've discovered that a typical fail case with elasticsearch is 
+      #   that on occassion, nodes will come up and not join the cluster
+      # This is an easy way to see if the number of nodes that the host 
+      #   actually sees (actual_data_nodes) matches what we're
+      #   expecting (expected_data_nodes).
+      # TODO: dynamically update expected_data_nodes based on defined hosts:
+      test "Expected vs Actual Nodes" do |r|
+        if r.body.is_a? Hash
+          expected_data_nodes = 8
+          actual_data_nodes = r.body['number_of_data_nodes']
+
+          if expected_data_nodes == actual_data_nodes
+            true
+          else
+            false
+          end
+        else
+          false
         end
       end
     end
