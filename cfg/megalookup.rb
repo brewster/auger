@@ -17,15 +17,15 @@ project "Megalookup" do
       #   you're on your own!
       # Keep in mind that right each test is re-parsing the output.
       t = {
-        FacebookEmailLookup:        "last_successful_response" ,
-        FacebookWebsiteLookup:      "last_successful_response" ,
-        FoursquarePhoneLookup:      "last_successful_response" ,
-        FoursquareFacebookIdLookup: "last_successful_response" ,
-        FoursquareEmailLookup:      "last_successful_response" ,
-        TwitterWebsiteLookup:       "last_successful_response" ,
-        GooglePlusLookup:           "last_successful_response" ,
-        GoogleSocialLookup:         "last_successful_response" ,
-        TwitterScreenNameLookup:    "last_successful_response" ,
+        FacebookEmailLookup:        "last_successful_response",
+        FacebookWebsiteLookup:      "last_successful_response",
+        FoursquarePhoneLookup:      "last_successful_response",
+        FoursquareFacebookIdLookup: "last_successful_response",
+        FoursquareEmailLookup:      "last_successful_response",
+        TwitterWebsiteLookup:       "last_successful_response",
+        GooglePlusLookup:           "last_successful_response",
+        GoogleSocialLookup:         "last_successful_response",
+        TwitterScreenNameLookup:    "last_successful_response",
       }
 
       t.each do |name, test|
