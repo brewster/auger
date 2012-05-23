@@ -34,6 +34,10 @@ cfg = File.exists?(ARGV[0]) ? ARGV[0] : "#{HOME}/cfg/#{ARGV[0]}.rb"
 
 Auger::Config.load(cfg).projects.each do |p|
 
+  ## max length of test names for formatting output
+  max_test_length = 
+    p.connections.map{|c| c.requests.map{|r| r.tests.map{|t| t.name.length}}}.flatten.max
+
   hostlist = options[:fqdn] ? p.fqdns : p.hosts
   
   hostlist.each do |host|
@@ -49,7 +53,7 @@ Auger::Config.load(cfg).projects.each do |p|
         results = c.do_tests
         results.flatten.each do |result|
           color = result.outcome ? :green : :red
-          puts "  %+30s  %-30s" % [result.test.name, result.to_s.color(color)]
+          puts "  %+#{max_test_length}s  %-30s" % [result.test.name, result.to_s.color(color)]
         end
       end
 
