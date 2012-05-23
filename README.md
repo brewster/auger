@@ -4,10 +4,10 @@
 * auger is DSL with which you can write tests for just about everything you run in your environment
 
 ### Currently Supported Plugins
-* HTTP(S)
-* Telnet
-* Socket (basic connectivity)
-* Cassandra
+* http/s
+* telnet
+* socket (basic connectivity)
+* cassandra
 
 ### Usage
 * the binary, aug, can be placed in your PATH, or aliased: ```alias aug="/path/to/auger/bin/aug"``` (although not required)
