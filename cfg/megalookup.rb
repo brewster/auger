@@ -7,34 +7,48 @@ project "Megalookup" do
     insecure true
 
     get "/status" do
+
+      ## this runs after request returns, but before tests
+      ## use it to munge response body from json string into a hash
+      before_tests do |r|
+        if r['Content-Type'].respond_to?(:match) and r['Content-Type'].match /application\/json/
+          begin 
+            r.body = JSON.parse(r.body)
+          rescue JSON::ParserError
+            puts "error parsing JSON in response body"
+          end
+        end
+      end
+
       test "Status 200" do |r|
         r.code == '200'
       end
 
-      # name should correspond to the hash key, value to the hash key.
-      # if you want to add tests that pick up key/value pairs that are
-      #   nested somewhere other than under :lookups,
-      #   you're on your own!
-      # Keep in mind that right each test is re-parsing the output.
-      t = {
-        FacebookEmailLookup:        "last_successful_response",
-        FacebookWebsiteLookup:      "last_successful_response",
-        FoursquarePhoneLookup:      "last_successful_response",
-        FoursquareFacebookIdLookup: "last_successful_response",
-        FoursquareEmailLookup:      "last_successful_response",
-        TwitterWebsiteLookup:       "last_successful_response",
-        GooglePlusLookup:           "last_successful_response",
-        GoogleSocialLookup:         "last_successful_response",
-        TwitterScreenNameLookup:    "last_successful_response",
-      }
+      lookups = %w[
+        FacebookEmailLookup
+        FacebookWebsiteLookup
+        FoursquarePhoneLookup
+        FoursquareFacebookIdLookup
+        FoursquareEmailLookup
+        TwitterWebsiteLookup
+        GooglePlusLookup
+        GoogleSocialLookup
+        TwitterScreenNameLookup
+      ]
 
-      t.each do |name, test|
-        test "#{name} - #{test}" do |r|
-          h = JSON.parse(r.body)
-          "#{h['lookups']["#{name}"]["#{test}"]}"
+      lookups.each do |lookup|
+        test "#{lookup} last successful response" do |r|
+          if r.body.is_a? Hash
+            r.body['lookups'][lookup]['last_successful_response']
+          else
+            false
+          end
         end
       end
+
     end
+
   end
+
 end
 

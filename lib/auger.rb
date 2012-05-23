@@ -69,6 +69,8 @@ module Auger
 
     def do_tests
       @requests.map do |request|
+        request.before_tests_proc.call(request.response) if request.before_tests_proc
+
         request.tests.map do |test|
           outcome = test.block.call(request.response)
           Result.new(test, outcome)
@@ -79,7 +81,7 @@ module Auger
   end
 
   class Request 
-    attr_accessor :tests, :response, :arg
+    attr_accessor :tests, :before_tests_proc, :response, :arg
 
     def self.load(arg, &block)
       request = new(arg)
@@ -94,6 +96,11 @@ module Auger
 
     def test(name, &block)
       @tests << Test.new(name, block)
+    end
+
+    ## callback to be run after request, but before tests
+    def before_tests(&block)
+      @before_tests_proc = block
     end
 
   end

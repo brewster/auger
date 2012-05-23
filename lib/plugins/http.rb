@@ -81,7 +81,6 @@ module Auger
       super
     end
 
-    ## treat all methods as setters for http headers
     def header(h)
       key, value = h.split /\s*:\s*/
       @headers[key] = value
