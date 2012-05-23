@@ -10,7 +10,7 @@ require "#{HOME}/lib/auger"
 
 options = {}
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: aug [-h|--help] [-f|--fqdn] cfg"
+  opts.banner = "Usage: aug [-h|--help] [-f|--fqdn] [-l|--list] cfg"
 
   if ARGV[0] == nil
     puts opts.banner.color(:yellow)
