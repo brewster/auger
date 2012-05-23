@@ -16,15 +16,21 @@
 
 ## Configuration Examples
 * please see cfg/examples for some included tests that you can make use of and learn from to write your own
-* to run through an example, let's take a look at the included elasticsearch.rb:
+* to run through an example, let's take a look at the included elasticsearch.rb
 
 ```ruby
 require 'json'
 
 project "Elasticsearch" do
   hosts "localhost"
-  
   http 9200 do
+```
+
+>>>> We'll require json for this particular test (as the elasticsearch api outputs in json)
+>>>> The project name is defined, then we specify the hosts we're going to test, which 
+>>>>>> can be a regex, for example ```hosts elasticsearch-d[01-08]```
+>>>> The protocol is http, port 9200... pretty easy so far.
+  
     get "/_cluster/health" do
 
       # this runs after request returns, but before tests
