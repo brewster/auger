@@ -11,10 +11,10 @@
 
 ### Usage
 * the binary, aug, can be placed in your PATH, or aliased: ```alias aug="/path/to/auger/bin/aug"``` (although not required)
+* ```bundle install```
 * sample configs included in examples/ can be moved into cfg/ and then run via ```aug redis```, etc. Edit as required for your env
 * alternatively, you can place your configs anywhere you'd like and set the env_var AUGER_CFG=/path/to/your/configs
 * then, you can call your tests via ```aug cfg```
-* if you'd like to use some more of the advanced plugins such as for cassandra, be sure to ```bundle install```
 
 ### Command Line Options
 * ```aug -l``` will print available tests
