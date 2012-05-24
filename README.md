@@ -14,7 +14,7 @@
 * ```bundle install```
 * sample configs included in examples/ can be moved into cfg/ and then run via ```aug redis```, etc. Edit as required for your env
 * alternatively, you can place your configs anywhere you'd like and set the env_var AUGER_CFG=/path/to/your/configs
-* then, you can call your tests via ```aug cfg```
+* then, you can call your tests via ```aug name_of_my_config```
 
 ### Command Line Options
 * ```aug -l``` will print available tests
