@@ -78,7 +78,7 @@ Auger::Config.load(cfg).projects.each do |p|
             if request.response.is_a? Exception # if request failed, just report that
               request.response
             else
-              test.block.call(request.response)
+              test.run(request.response)
             end
           Auger::Result.new(test, outcome)
         end
