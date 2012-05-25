@@ -17,7 +17,7 @@ module Auger
 
   class Http < Auger::Connection
     #attr_accessor :url, :requests, :ssl, :insecure, :user, :password
-    attr_accessor :url, :ssl, :insecure, :user, :password
+    attr_accessor :url, :ssl, :insecure
 
     def initialize(port)
       @headers = []
@@ -26,14 +26,6 @@ module Auger
 
     def url(*u)
       u.empty? ? @url : @url = u.join('')
-    end
-
-    def user(user)
-      @user = user
-    end
-
-    def password(password)
-      @password = password
     end
 
     def get(url, &block)
@@ -57,7 +49,6 @@ module Auger
       http = Net::HTTP.new(host, @port)
       http.use_ssl = @ssl
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @insecure
-      http.basic_auth(@user, @password||'') if @user
       @headers.each do |header|
         key, value = header.split /\s*:\s*/
         http[key] = value
@@ -73,7 +64,7 @@ module Auger
   end
 
   class HttpRequest < Auger::Request
-    attr_accessor :headers
+    attr_accessor :headers, :user, :password
 
     def initialize(url)
       @headers = {}
@@ -85,8 +76,17 @@ module Auger
       @headers[key] = value
     end
 
+    def user(user)
+      @user = user
+    end
+
+    def password(password)
+      @password = password
+    end
+
     def run(http)
       get = Net::HTTP::Get.new(@arg)
+      get.basic_auth(@user, @password||'') if @user
       @headers.each { |k,v| get[k] = v }
       http.request(get)
     end
