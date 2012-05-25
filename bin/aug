@@ -70,7 +70,9 @@ Auger::Config.load(cfg).projects.each do |p|
       results = c.requests.map do |request|
 
         ## callback to be run before tests
-        request.before_tests_proc.call(request.response) if request.before_tests_proc
+        if request.before_tests_proc
+          request.before_tests_proc.call(request.response) rescue request.response = $!
+        end
 
         ## run tests
         request.tests.map do |test|
@@ -91,7 +93,7 @@ Auger::Config.load(cfg).projects.each do |p|
         output = case result.outcome
                  when TrueClass then
                    "\u2713".color(:green)
-                 when MatchData then
+                 when MatchData then # boolean if no captures, otherwise list captures
                    (result.outcome.captures.empty? ? "\u2713" : result.outcome.captures.join(' '))
                      .color(:green)
                  when FalseClass then
