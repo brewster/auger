@@ -53,7 +53,7 @@ module Auger
       @insecure = flag
     end
 
-    def do_requests(host)
+    def open(host)
       http = Net::HTTP.new(host, @port)
       http.use_ssl = @ssl
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @insecure
@@ -62,13 +62,12 @@ module Auger
         key, value = header.split /\s*:\s*/
         http[key] = value
       end
-      http.start do |http|
-        @requests.each do |request|
-          get = Net::HTTP::Get.new(request.arg)
-          request.headers.each { |k,v| get[k] = v }
-          request.response = http.request(get)
-        end
-      end
+      http.start
+      http
+    end
+
+    def close(http)
+      http.finish
     end
 
   end
@@ -85,6 +84,13 @@ module Auger
       key, value = h.split /\s*:\s*/
       @headers[key] = value
     end
+
+    def run(http)
+      get = Net::HTTP::Get.new(@arg)
+      @headers.each { |k,v| get[k] = v }
+      http.request(get)
+    end
+
   end
 
 end

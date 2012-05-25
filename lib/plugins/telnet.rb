@@ -16,7 +16,7 @@ module Auger
     end
 
     def cmd(arg, &block)
-      @requests << Auger::Request.load(arg, &block)
+      @requests << TelnetRequest.load(arg, &block)
     end
 
     def timeout(value)
@@ -27,6 +27,15 @@ module Auger
       @options["Binmode"] = bool
     end
 
+    def open(host)
+      opts = @options.merge("Host" => host)
+      Net::Telnet::new(opts)
+    end
+
+    def close(telnet)
+      telnet.close
+    end
+
     def do_requests(host)
       opts = @options.merge("Host" => host)
       telnet = Net::Telnet::new(opts)
@@ -34,6 +43,12 @@ module Auger
         request.response = telnet.cmd(request.arg)
       end
       telnet.close
+    end
+  end
+
+  class TelnetRequest < Auger::Request
+    def run(telnet)
+      telnet.cmd(@arg)
     end
   end
 

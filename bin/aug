@@ -46,6 +46,7 @@ Auger::Config.load(cfg).projects.each do |p|
   max_test_length = 
     p.connections.map{|c| c.requests.map{|r| r.tests.map{|t| t.name.length}}}.flatten.max
 
+  ## -f option uses fqdn
   hostlist = options[:fqdn] ? p.fqdns : p.hosts
   
   hostlist.each do |host|
@@ -53,16 +54,57 @@ Auger::Config.load(cfg).projects.each do |p|
 
     p.connections.each do |c|
 
-      begin 
-        c.do_requests(host)
-      rescue => e               # connection failure
-        puts "#{c.class}:#{c.port} #{e.class}: #{e.message.color(:red)}"
-      else
-        results = c.do_tests
-        results.flatten.each do |result|
-          color = result.outcome ? :green : :red
-          puts "  %+#{max_test_length}s  %-30s" % [result.test.name, result.to_s.color(color)]
+      begin
+        conn = c.open(host)
+        c.requests.each do |request|
+          request.response = request.run(conn) rescue $!
         end
+        c.close conn
+      rescue => e
+        c.requests.each do |request|
+          request.response = e  # response can be an Exception if we caught one
+        end
+      end
+
+      ## array of test results
+      results = c.requests.map do |request|
+
+        ## callback to be run before tests
+        request.before_tests_proc.call(request.response) if request.before_tests_proc
+
+        ## run tests
+        request.tests.map do |test|
+          outcome =
+            if request.response.is_a? Exception # if request failed, just report that
+              request.response
+            else
+              test.block.call(request.response)
+            end
+          Auger::Result.new(test, outcome)
+        end
+      end
+      
+      ## print results
+      results.flatten.each do |result|
+
+        ## format test outcome based on class
+        output = case result.outcome
+                 when TrueClass then
+                   "\u2713".color(:green)
+                 when MatchData then
+                   (result.outcome.captures.empty? ? "\u2713" : result.outcome.captures.join(' '))
+                     .color(:green)
+                 when FalseClass then
+                   "\u2717".color(:red)
+                 when NilClass then
+                   "nil".color(:red)
+                 when Exception then
+                   "#{result.outcome.class}: #{result.outcome.to_s}".color(:magenta)
+                 else
+                   result.outcome.to_s.color(:green)
+                 end
+
+        puts "  %+#{max_test_length}s  %-30s" % [result.test.name, output]
       end
 
     end

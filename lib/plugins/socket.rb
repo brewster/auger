@@ -9,22 +9,23 @@ module Auger
 
   class Socket < Auger::Connection
     def open?(&block)
-      @requests << Auger::Request.load(nil, &block)
+      @requests << SocketRequest.load(nil, &block)
     end
 
-    def do_requests(host)
-      ## hack, just return false if the socket fails to connect
-      socket = begin
-                 TCPSocket.open(host, @port)
-               rescue
-                 false
-               end
-      @requests.each do |request|
-        request.response = socket ? true : false
-      end
+    def open(host)
+      TCPSocket.open(host, @port) rescue false
+    end
+
+    def close(socket)
       socket.close if socket
     end
 
+  end
+
+  class SocketRequest < Auger::Request
+    def run(socket)
+      socket ? true : false      
+    end
   end
 
 end

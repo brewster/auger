@@ -1,7 +1,7 @@
 module Auger
 
   class Connection
-    attr_accessor :port, :requests, :response
+    attr_accessor :port, :requests, :connection, :response
 
     def self.load(port, &block)
       connection = new(port)
@@ -14,16 +14,16 @@ module Auger
       @requests = []
     end
 
-    def do_tests
-      @requests.map do |request|
-        request.before_tests_proc.call(request.response) if request.before_tests_proc
+    # def do_tests
+    #   @requests.map do |request|
+    #     request.before_tests_proc.call(request.response) if request.before_tests_proc
 
-        request.tests.map do |test|
-          outcome = test.block.call(request.response)
-          Result.new(test, outcome)
-        end
-      end
-    end
+    #     request.tests.map do |test|
+    #       outcome = test.block.call(request.response)
+    #       Result.new(test, outcome)
+    #     end
+    #   end
+    # end
 
   end
   
