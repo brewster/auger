@@ -5,6 +5,7 @@ GEM
       simple_uuid (>= 0.2.0)
       thrift_client (>= 0.7.1)
     host_range (0.0.1)
+    net-dns (0.7.1)
     rainbow (1.1.4)
     simple_uuid (0.2.0)
     thrift (0.7.0)
@@ -17,4 +18,5 @@ PLATFORMS
 DEPENDENCIES
   cassandra-cql
   host_range
+  net-dns
   rainbow
