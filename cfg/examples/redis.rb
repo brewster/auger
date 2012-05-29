@@ -23,6 +23,9 @@ project "Redis" do
       test "blocked clients" do |r|
         r.match /blocked_clients:(.+)/
       end
+      test "connected slaves" do |r|
+        r.match /connected_slaves:(.+)/
+      end
     end
   end
 end

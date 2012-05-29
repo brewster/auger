@@ -6,8 +6,8 @@ project "Webserver Nginx" do
     get "/status" do
       header "Location: www.wickedcoolurl.com"
 
-      test "Sign-in moved" do |response|
-        response.body.match /the site is up/
+      test "Site is up?" do |r|
+        r.body.match /the site is up/
       end
     end
   end
@@ -17,7 +17,7 @@ project "Webserver Nginx" do
 
     get "/index.html" do
       test "Index" do |r|
-        response.body.match /HEAD/
+        r.body.match /HEAD/
       end
     end
   end
