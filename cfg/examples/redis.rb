@@ -5,26 +5,23 @@ project "Redis" do
     timeout "3"
     binmode false
 
-    # issues and info command followed by quit,
+    tests = %w[
+      redis_version
+      uptime_in_days
+      used_memory_human
+      blocked_clients
+      connected_slaves
+    ]
+
+
+    # issue an info command followed by quit,
     #   otherwise, we'll hang on an open port.
+   
     cmd "info\n\nquit\n\n" do
-      test "version" do |r|
-        r.match /redis_version:(.+)/
-      end
-      test "role" do |r|
-        r.match /role:(.+)/
-      end
-      test "uptime_in_days" do |r|
-        r.match /uptime_in_days:(.+)/
-      end
-      test "used memory" do |r|
-        r.match /used_memory_human:(.+)/
-      end
-      test "blocked clients" do |r|
-        r.match /blocked_clients:(.+)/
-      end
-      test "connected slaves" do |r|
-        r.match /connected_slaves:(.+)/
+      tests.each do |t|
+        test "#{t}" do |r|
+          r.match /#{t}:(.+)/
+        end
       end
     end
   end
