@@ -32,7 +32,11 @@ module Auger
 
       ## run tests
       @tests.map do |test|
-        outcome = @response.is_a?(Exception) ? @response : test.run(@response)
+        outcome = if @response.is_a? Exception 
+                    @response   # just return the exception
+                  else
+                    test.run(@response) rescue $!
+                  end
         Auger::Result.new(test, outcome)
       end
     end
