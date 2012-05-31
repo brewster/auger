@@ -140,7 +140,7 @@ end
 * ZSH completion:
 
         _augprojects () {
-          compadd $(aug -l)
+          _files; compadd $(aug -l)
         }
         compdef _augprojects aug
 
