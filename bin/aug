@@ -33,84 +33,58 @@ optparse = OptionParser.new do |opts|
 end
 optparse.parse!
 
-
 ## load plugins
 Dir["#{AUGER_DIR}/lib/plugins/*.rb"].each {|file| require file }
 
 ## cfg file can be e.g. 'imagine' or relative path
 cfg = File.exists?(ARGV[0]) ? ARGV[0] : "#{AUGER_CFG}/#{ARGV[0]}.rb"
 
+## pretty ascii output for different result outcomes
+def format_outcome(outcome)
+  case outcome
+  when TrueClass then
+    "\u2713".color(:green)
+  when MatchData then # boolean if no captures, otherwise list captures
+    (outcome.captures.empty? ? "\u2713" : outcome.captures.join(' '))
+      .color(:green)
+  when FalseClass then
+    "\u2717".color(:red)
+  when NilClass then
+    "nil".color(:red)
+  when Exception then
+    "#{outcome.class}: #{outcome.to_s}".color(:magenta)
+  else
+    outcome.to_s.color(:green)
+  end
+end
+
 Auger::Config.load(cfg).projects.each do |p|
 
   ## max length of test names for formatting output
+  ## -f option uses fqdn
+  hosts = options[:fqdn] ? p.fqdns : p.hosts
+
+  threads = {}
+  hosts.map do |host|
+    threads[host] = p.connections.map do |c|
+      Thread.new do
+        c.do_requests(host)
+        c.requests.map { |request| request.do_tests }
+      end
+    end
+  end
+  
   max_test_length = 
     p.connections.map{|c| c.requests.map{|r| r.tests.map{|t| t.name.length}}}.flatten.max
 
-  ## -f option uses fqdn
-  hostlist = options[:fqdn] ? p.fqdns : p.hosts
-  
-  hostlist.each do |host|
+  hosts.each do |host|
     puts "[#{host.color(:cyan)}]"
-
-    p.connections.each do |c|
-
-      begin
-        conn = c.open(host)
-        c.requests.each do |request|
-          request.response = request.run(conn) rescue $!
-        end
-        c.close conn
-      rescue => e
-        c.requests.each do |request|
-          request.response = e  # response can be an Exception if we caught one
-        end
-      end
-
-      ## array of test results
-      results = c.requests.map do |request|
-
-        ## callback to be run before tests
-        if request.before_tests_proc
-          request.before_tests_proc.call(request.response) rescue request.response = $!
-        end
-
-        ## run tests
-        request.tests.map do |test|
-          outcome =
-            if request.response.is_a? Exception # if request failed, just report that
-              request.response
-            else
-              test.run(request.response)
-            end
-          Auger::Result.new(test, outcome)
-        end
-      end
-      
-      ## print results
+    threads[host].each do |thread| 
+      results = thread.value    # this waits on thread
       results.flatten.each do |result|
-
-        ## format test outcome based on class
-        output = case result.outcome
-                 when TrueClass then
-                   "\u2713".color(:green)
-                 when MatchData then # boolean if no captures, otherwise list captures
-                   (result.outcome.captures.empty? ? "\u2713" : result.outcome.captures.join(' '))
-                     .color(:green)
-                 when FalseClass then
-                   "\u2717".color(:red)
-                 when NilClass then
-                   "nil".color(:red)
-                 when Exception then
-                   "#{result.outcome.class}: #{result.outcome.to_s}".color(:magenta)
-                 else
-                   result.outcome.to_s.color(:green)
-                 end
-
+        output = format_outcome(result.outcome)
         puts "  %+#{max_test_length}s  %-30s" % [result.test.name, output]
       end
-
     end
-
   end
-
 end

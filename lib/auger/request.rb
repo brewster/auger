@@ -23,6 +23,20 @@ module Auger
       @before_tests_proc = block
     end
 
+    ## returns array of Auger::Result objects for tests
+    def do_tests
+      ## callback to be run before tests
+      if self.before_tests_proc
+        self.before_tests_proc.call(@response) rescue @response = $!
+      end
+
+      ## run tests
+      @tests.map do |test|
+        outcome = @response.is_a?(Exception) ? @response : test.run(@response)
+        Auger::Result.new(test, outcome)
+      end
+    end
+
   end
   
 end
