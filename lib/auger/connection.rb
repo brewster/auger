@@ -1,7 +1,7 @@
 module Auger
 
   class Connection
-    attr_accessor :port, :requests, :connection, :response, :roles
+    attr_accessor :requests, :connection, :response, :roles, :options
 
     def self.load(port, &block)
       connection = new(port)
@@ -10,7 +10,7 @@ module Auger
     end
 
     def initialize(port)
-      @port = port
+      @options = {:port => port}
       @roles = []
       @requests = []
     end
@@ -18,6 +18,10 @@ module Auger
     def roles(*names)
       @roles += names if names
       @roles
+    end
+
+    def method_missing(method, arg)
+      @options[method] = arg
     end
 
     def do_requests(host)
