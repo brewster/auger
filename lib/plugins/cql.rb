@@ -9,23 +9,17 @@ module Auger
   end
 
   class Cql < Auger::Connection
-    # def initialize(port)
-    #   @options = {}
-    #   super
-    # end
-
-    def open(host)
-      CassandraCQL::Database.new "#{host}:#{@options[:port]}", @options
-    end
-
-    def execute(statement, &block)
-      @requests << CqlRequest.load(statement, &block)
+    def open(host, options)
+      CassandraCQL::Database.new "#{host}:#{options[:port]}", options
     end
 
     def close(db)
       db.disconnect!
     end
-    
+
+    def execute(statement, &block)
+      @requests << CqlRequest.load(statement, &block)
+    end
   end
 
   class CqlRequest < Auger::Request

@@ -79,7 +79,7 @@ Auger::Config.load(cfg).projects.each do |p|
   ## run tests
   p.connections.each do |c|
     p.servers(c.roles).map do |server|
-      threads[server] << Thread.new do
+      threads[server.name] << Thread.new do
         c.do_requests(server)
         c.requests.map { |request| request.do_tests }
       end

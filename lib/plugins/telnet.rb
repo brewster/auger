@@ -8,24 +8,23 @@ module Auger
   end
 
   class Telnet < Auger::Connection
-    def cmd(arg, &block)
-      @requests << TelnetRequest.load(arg, &block)
-    end
-
     def timeout(value)
-      # @options["Timeout"] = value.to_i
       @options[:timeout] = value.to_i
     end
 
-    def open(host)
+    def open(host, options)
       ## telnet opts array needs capitalized strings as keys
       opts = { 'Host' => host }
-      @options.each { |key, value| opts[key.to_s.capitalize] = value }
+      options.each { |key, value| opts[key.to_s.capitalize] = value }
       Net::Telnet::new(opts)
     end
 
     def close(telnet)
       telnet.close
+    end
+
+    def cmd(arg, &block)
+      @requests << TelnetRequest.load(arg, &block)
     end
   end
 

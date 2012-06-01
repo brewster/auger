@@ -13,14 +13,10 @@ module Auger
       @requests << DnsDomainRequest.load(nil, &block)
     end
 
-    def query(name, &block)
-      @requests << DnsQueryRequest.load(name, &block)
-    end
-
-    def open(host)
-      @options[:nameserver] = host
-      dns = Net::DNS::Resolver.new(@options)
-      dns.use_tcp = true if @options[:use_tcp]
+    def open(host, options)
+      options[:nameserver] = host
+      dns = Net::DNS::Resolver.new(options)
+      dns.use_tcp = true if options[:use_tcp]
       dns
     end
 
@@ -28,6 +24,9 @@ module Auger
       dns = nil
     end
 
+    def query(name, &block)
+      @requests << DnsQueryRequest.load(name, &block)
+    end
   end
 
   class DnsDomainRequest < Auger::Request

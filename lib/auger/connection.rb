@@ -24,9 +24,11 @@ module Auger
       @options[method] = arg
     end
 
-    def do_requests(host)
+    def do_requests(server)
+      options = @options.merge(server.options)
+
       begin
-        conn = self.open(host)
+        conn = self.open(server.name, options)
         @requests.each do |request|
           request.response = request.run(conn) rescue $!
         end
