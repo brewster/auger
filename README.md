@@ -27,21 +27,20 @@
  
 We'll require json for this particular test (as the elasticsearch api outputs in json)
 The project name is defined, then we specify the servers we're going to test, which can be a regex, for example ```servers elasticsearch-d[01-08]```
-The protocol is http, port 9200... pretty easy so far.  
 
 ```ruby
 require 'json'
 
 project "Elasticsearch" do
   servers "localhost"
-  http 9200 do
 ```
 
 
-We define the request to initiate, in this case to /_cluster/health. 
+We define the request to initiate, in this case to /_cluster/health, which will use http and connect to :9200.
 I'll let the comments for before_tests speak for themselves.
 
 ```ruby  
+  http 9200 do
     get "/_cluster/health" do
 
       # this runs after request returns, but before tests
