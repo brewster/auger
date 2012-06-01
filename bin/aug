@@ -5,7 +5,7 @@ AUGER_DIR = File.dirname(File.dirname(__FILE__))
 AUGER_LIB = File.join(AUGER_DIR, 'lib')
 
 if ENV['AUGER_CFG'] == nil
-  AUGER_CFG = File.join(AUGER_DIR, 'cfg')
+  AUGER_CFG = File.join(AUGER_DIR, 'cfg').split
 else
   AUGER_CFG = ENV['AUGER_CFG'].split(':')
 end
