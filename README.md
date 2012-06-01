@@ -125,7 +125,7 @@ end
 * in addition to the straight forward servers:port association described in the example above, we can also define roles
 * roles are used much as in capistrano, and let us do things like the following:
 
-```
+```ruby
 project "Imagine" do
   servers "imagine.brewster.com", :fqdn, :port => 443
   servers "prod-dims-r[01-10]", :app, :port => 9999
@@ -142,7 +142,7 @@ project "Imagine" do
 * the upshot of this is that you can make use of roles and custom ports to deal with scenarios such as mulitple app servers for a given project running on different ports, or as is the case above, a public url for our app that uses a different port than our app servers.
 * you can of course assign given roles only to certain tests as well, e.g.
 
-```
+```ruby
 project "ChronoSynclasticInfundibulum" do
   servers "chrono-r0[1-3]", :web
   servers "synclastic-r0[1-3]", :data
