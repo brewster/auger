@@ -2,7 +2,7 @@ require 'json'
 
 project "Elasticsearch" do
   servers "localhost"
-  
+ 
   http 9200 do
     get "/_cluster/health" do
 
@@ -18,10 +18,12 @@ project "Elasticsearch" do
         end
       end
 
+      # simple as it gets... did we get 200 back?
       test "Status 200" do |r|
         r.code == '200'
       end
 
+      # an array of stats we want to collect
       stats = %w[
         cluster_name
         status
@@ -35,6 +37,8 @@ project "Elasticsearch" do
         unassigned_shards
       ]
 
+      # loop through each stat
+      # if the body is a hash, return the value
       stats.each do |stat|
         test "#{stat}" do |r|
           if r.body.is_a? Hash
