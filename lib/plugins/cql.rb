@@ -9,23 +9,17 @@ module Auger
   end
 
   class Cql < Auger::Connection
-    attr_accessor :options
+    # def initialize(port)
+    #   @options = {}
+    #   super
+    # end
 
-    def initialize(port)
-      @options = {}
-      super
-    end
-
-    def keyspace(keyspace)
-      @options[:keyspace] = keyspace
+    def open(host)
+      CassandraCQL::Database.new "#{host}:#{@options[:port]}", @options
     end
 
     def execute(statement, &block)
       @requests << CqlRequest.load(statement, &block)
-    end
-
-    def open(host)
-      CassandraCQL::Database.new "#{host}:#{@port}", @options
     end
 
     def close(db)

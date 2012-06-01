@@ -13,7 +13,7 @@ module Auger
     end
 
     def open(host)
-      TCPSocket.open(host, @port) rescue false
+      TCPSocket.open(host, @options[:port]) rescue false
     end
 
     def close(socket)
