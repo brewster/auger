@@ -16,6 +16,7 @@ Gem::Specification.new do |gem|
   gem.version       = Auger::VERSION
 
   # dependencies
+  gem.add_dependency('json')
   gem.add_dependency('net-dns')
   gem.add_dependency('rainbow')
   gem.add_dependency('host_range')
