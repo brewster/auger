@@ -7,11 +7,7 @@ AUGER_LIB = File.join(AUGER_DIR, 'lib')
 if ENV['AUGER_CFG'] == nil
   AUGER_CFG = File.join(AUGER_DIR, 'cfg')
 else
-  AUGER_CFG = ENV['AUGER_CFG'].split(':').each do |path|
-    if File.exists?("#{path}/#{ARGV[0]}.rb")
-      cfg = "#{path}/#{ARGV[0]}.rb"
-    end
-  end
+  AUGER_CFG = ENV['AUGER_CFG'].split(':')
 end
 
 ## relative path to libs
