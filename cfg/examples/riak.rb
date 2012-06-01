@@ -1,20 +1,22 @@
 project "Riak" do
-  hosts "localhost"
+  servers "localhost"
+
+  riak_stats = %w[
+    riak_kv_vnodes_running
+    vnode_gets
+    vnode_puts
+    cpu_nprocs
+  ]
   
   http 8098 do
     get "/stats" do
-      test "Riak KV Vnodes Running" do |r|
-        r.body.match /"riak_kv_vnodes_running":(\d+)/
+
+      riak_stats.each do |t|
+        test "#{t}" do |r|
+          r.body.match /"#{t}":(\d+)/
+        end
       end
-      test "Vnode Gets" do |r|
-        r.body.match /"vnode_gets":(\d+)/
-      end
-      test "Vnode Puts" do |r|
-        r.body.match /"vnode_puts":(\d+)/
-      end
-      test "CPU Nprocs" do |r|
-        r.body.match /"cpu_nprocs":(\d+)/
-      end
+
       test "CPU Avg 1/5/15" do |r|
         r.body.match(/"cpu_avg1":(\d+),"cpu_avg5":(\d+),"cpu_avg15":(\d+)/).captures.join("/")
       end

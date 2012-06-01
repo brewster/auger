@@ -1,8 +1,11 @@
 project "Webserver Nginx" do
-  fqdns "www.wickedcoolurl.com"
-  hosts "frontend-r[01-04]"
+  servers "www.wickedcoolurl.com", :fqdn, :port => 80
+  servers "frontend-r[01-04]", :app, :port => 6666
+  servers "data-r[01-04]", :data
 
-  http 80 do
+  http do
+    roles :fqdn, :app
+
     get "/status" do
       header "Location: www.wickedcoolurl.com"
 
@@ -12,7 +15,17 @@ project "Webserver Nginx" do
     end
   end
 
-  https 443 do
+  https do
+    roles :fqdn
+
+    get "/index.html" do
+      test "Index" do |r|
+        r.body.match /HEAD/
+      end
+    end
+  end
+  https do
+    roles :app
     insecure true
 
     get "/index.html" do
@@ -22,8 +35,8 @@ project "Webserver Nginx" do
     end
   end
 
-  ## example telnet request
-  telnet 80 do
+  telnet do
+    roles :fqdn, :app
     timeout "3"
     binmode false
     
@@ -32,6 +45,12 @@ project "Webserver Nginx" do
         r.match /Server: (nginx\/[\d\.]+)/
       end
     end
+  end
+
+  socket 9999 do
+    roles :data
+
+    open? { test "Port 9999 is open?" }
   end
 end
 
