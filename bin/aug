@@ -3,16 +3,9 @@
 
 AUGER_DIR = File.dirname(File.dirname(__FILE__))
 AUGER_LIB = File.join(AUGER_DIR, 'lib')
+AUGER_CFG = ENV['AUGER_CFG'].split(':') || File.join(AUGER_DIR, 'cfg')
 
-if ENV['AUGER_CFG'] == nil
-  AUGER_CFG = File.join(AUGER_DIR, 'cfg')
-else
-  AUGER_CFG = ENV['AUGER_CFG'].split(':').each do |path|
-    if File.exists?("#{path}/#{ARGV[0]}.rb")
-      cfg = "#{path}/#{ARGV[0]}.rb"
-    end
-  end
-end
+puts AUGER_CFG
 
 ## relative path to libs
 $LOAD_PATH.unshift(AUGER_LIB) unless $LOAD_PATH.include?(AUGER_LIB)
@@ -31,9 +24,7 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('-l', '--list', 'List available configs and exit.') do
-    AUGER_CFG.each do |c|
-      puts Dir["#{c}/*.rb"].map {|file| File.basename(file).sub(/\.rb$/, '')}
-    end
+    puts Dir["#{AUGER_CFG}/*.rb"].map {|file| File.basename(file).sub(/\.rb$/, '')}
     exit
   end
   opts.on('-h', '--help', 'Display help') do
@@ -50,10 +41,8 @@ Dir["#{AUGER_DIR}/lib/plugins/*.rb"].each {|file| require file }
 if File.exists?(ARGV[0])
   cfg = ARGV[0]
 else
-  AUGER_CFG.each do |path|
-    if File.exists?("#{path}/#{ARGV[0]}.rb")
-      cfg = "#{path}/#{ARGV[0]}.rb"
-    end
+  AUGER_CFG.each do |p|
+    cfg = "#{p}"
   end
 end
 
