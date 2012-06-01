@@ -9,18 +9,6 @@ module Auger
   end
   
   class Dns < Auger::Connection
-    attr_accessor :options, :use_tcp
-
-    def initialize(port)
-      @options = {}
-      super
-    end
-
-    ## use TCP virtual circuits instead of UDP datagrams
-    def use_tcp(bool)
-      @use_tcp = bool
-    end
-
     def domain(&block)
       @requests << DnsDomainRequest.load(nil, &block)
     end
@@ -31,9 +19,8 @@ module Auger
 
     def open(host)
       @options[:nameserver] = host
-      @options[:port] = @port
       dns = Net::DNS::Resolver.new(@options)
-      dns.use_tcp = true if @use_tcp
+      dns.use_tcp = true if @options[:use_tcp]
       dns
     end
 
