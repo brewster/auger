@@ -6,7 +6,7 @@
 ### Currently Supported Plugins
 * http/s
 * telnet
-* socket (basic connectivity)
+* socket
 * cassandra
 
 ### Usage
@@ -20,20 +20,20 @@
 * ```aug -l``` will print available tests
 * ```aug -h``` will print usage details
 
-### Configuration Examples
+### Configuration
 * please see cfg/examples for some included tests that you can make use of and learn from to write your own
-* to run through an example, let's take a look at the included elasticsearch.rb
 
-  
+#### Example 1
+ 
 We'll require json for this particular test (as the elasticsearch api outputs in json)
-The project name is defined, then we specify the hosts we're going to test, which can be a regex, for example ```hosts elasticsearch-d[01-08]```
+The project name is defined, then we specify the servers we're going to test, which can be a regex, for example ```servers elasticsearch-d[01-08]```
 The protocol is http, port 9200... pretty easy so far.  
 
 ```ruby
 require 'json'
 
 project "Elasticsearch" do
-  hosts "localhost"
+  servers "localhost"
   http 9200 do
 ```
 
@@ -121,6 +121,54 @@ this or other cases.
 end
 ```
 
+#### Example 2
+* in addition to the straight forward servers:port association described in the example above, we can also define roles
+* roles are used much as in capistrano, and let us do things like the following:
+
+```
+project "Imagine" do
+  servers "imagine.brewster.com", :fqdn, :port => 443
+  servers "prod-dims-r[01-10]", :app, :port => 9999
+
+  https do
+    roles :app, :fqdn
+    insecure true
+
+    ... test code ...
+```
+
+* so here we assign a role of :fqdn to imagine.brewster.com, and :app to the machines that are actually running that app on the backend
+* we then override the default port in each case, since our app servers run the service on :9999, while the fqdn makes use of a vip and port translation to run on :443.
+* the upshot of this is that you can make use of roles and custom ports to deal with scenarios such as mulitple app servers for a given project running on different ports, or as is the case above, a public url for our app that uses a different port than our app servers.
+* you can of course assign given roles only to certain tests as well, e.g.
+
+```
+project "ChronoSynclasticInfundibulum" do
+  servers "chrono-r0[1-3]", :web
+  servers "synclastic-r0[1-3]", :data
+
+  https do
+    roles :web
+    ... https test code ...
+  end
+
+
+  data_ports = {
+    infun:    1234,
+    dibulum:  5678,
+  }
+
+  data_ports.each do |name, num|
+    roles :data
+
+    socket num do
+      open? { test "Is #{name} (#{num}) open?" }
+    end
+  end
+end
+```
+
+* this will have the effect of only running the http tests against your :web servers, and only checking for the specified open ports on your :data servers
 
 ### Pull Requests
 * yes please
