@@ -8,10 +8,6 @@ module Auger
   end
 
   class Socket < Auger::Connection
-    def open?(&block)
-      @requests << SocketRequest.load(nil, &block)
-    end
-
     def open(host)
       TCPSocket.open(host, @options[:port]) rescue false
     end
@@ -20,6 +16,9 @@ module Auger
       socket.close if socket
     end
 
+    def open?(&block)
+      @requests << SocketRequest.load(nil, &block)
+    end
   end
 
   class SocketRequest < Auger::Request
