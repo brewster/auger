@@ -1,7 +1,7 @@
 project "Webserver Nginx" do
-  servers "www.wickedcoolurl.com", :fqdn, :port => 80
-  servers "frontend-r[01-04]", :app, :port => 6666
-  servers "data-r[01-04]", :data
+  server "www.wickedcoolurl.com", :fqdn, :port => 80
+  server "frontend-r[01-04]", :app, :port => 6666
+  server "data-r[01-04]", :data
 
   http do
     roles :fqdn, :app

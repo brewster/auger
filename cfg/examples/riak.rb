@@ -1,5 +1,5 @@
 project "Riak" do
-  servers "localhost"
+  server "localhost"
 
   riak_stats = %w[
     riak_kv_vnodes_running

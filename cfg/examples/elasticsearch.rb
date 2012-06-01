@@ -1,7 +1,7 @@
 require 'json'
 
 project "Elasticsearch" do
-  servers "localhost"
+  server "localhost"
  
   http 9200 do
     get "/_cluster/health" do

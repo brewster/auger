@@ -1,5 +1,5 @@
 project "Redis" do
-  servers "localhost"
+  server "localhost"
 
   telnet 6379 do
     timeout "3"
