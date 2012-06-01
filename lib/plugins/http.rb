@@ -21,10 +21,10 @@ module Auger
       @requests << Auger::HttpRequest.load(url, &block)
     end
 
-    def open(host)
-      http = Net::HTTP.new(host, @options[:port])
-      http.use_ssl = @options[:ssl]
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @options[:insecure]
+    def open(host, options)
+      http = Net::HTTP.new(host, options[:port])
+      http.use_ssl = options[:ssl]
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE if options[:insecure]
       http.start
       http
     end
