@@ -24,6 +24,7 @@ module Auger
       options = args.last.is_a?(Hash) ? args.pop : {}
       servers = args.map { |arg| HostRange.parse(arg) }.flatten
       servers.each { |server| roles[name] << server }
+      #servers.each { |server| roles[name] << Server.new(server) }
     end
 
     def server(*args)
@@ -43,15 +44,11 @@ module Auger
 
     alias :hosts :server
 
+    ## return array of servers for given array of roles (default to all)
     def servers(roles = [])
       (roles.empty? ? @roles.values : @roles.values_at(*roles))
         .flatten
     end
-
-    ## add host or return list of hosts
-    # def hosts(*ranges)
-    #   ranges.empty? ? @hosts.flatten : @hosts << ranges.map {|r| HostRange.parse(r)}
-    # end
 
     alias :host :hosts
 
