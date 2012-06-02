@@ -16,9 +16,10 @@ Gem::Specification.new do |gem|
   gem.version       = Auger::VERSION
 
   # dependencies
-  gem.add_dependency('json')
-  gem.add_dependency('net-dns')
-  gem.add_dependency('rainbow')
-  gem.add_dependency('host_range')
-  gem.add_dependency('cassandra-cql')
+  gem.add_dependency('json', '>= 1.7.3')
+  gem.add_dependency('net-dns', '>= 0.7.1')
+  gem.add_dependency('rainbow', '>=1.1.4')
+  gem.add_dependency('host_range', '>=0.0.1')
+  gem.add_dependency('cassandra-cql', '>= 1.0.4')
 end
+
