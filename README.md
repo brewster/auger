@@ -174,6 +174,26 @@ end
 
 This will have the effect of only running the http tests against your :web servers, and only checking for the specified open ports on your :data servers.
 
+### Sample Output
+* here's the kind of thing you should expect to see from tests
+
+```
+[prod-redis-r01]
+               role  master               
+      redis_version  2.4.14               
+     uptime_in_days  4                    
+  used_memory_human  2.91M                
+    blocked_clients  0                    
+   connected_slaves  1                    
+[prod-redis-r02]
+               role  slave                
+      redis_version  2.4.14               
+     uptime_in_days  4                    
+  used_memory_human  1.37M                
+    blocked_clients  0                    
+   connected_slaves  0
+```
+
 ### Pull Requests
 * yes please
 * new plugins and genereal bug fixes, updates, etc are all welcome
