@@ -14,7 +14,7 @@
 * socket
 * cassandra
 
-### Insallation
+### Installation
 * gem install auger
 
 #### If you want to run the latest source:
@@ -24,7 +24,8 @@
 ### Usage
 * sample configs included in cfg/examples/ can be moved into cfg/ and then run via ```aug redis```, etc
 * alternatively, you can place your configs anywhere you'd like and set the env_var AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage
-* then, you can call your tests via ```aug name_of_my_config```
+  * now call your tests via ```aug name_of_my_config```
+  * configs should be named some_name.rb
 * ```aug -l``` will print available tests
 * ```aug -h``` will print usage details
 
@@ -32,7 +33,6 @@
 * please see cfg/examples for some included tests that you can make use of and learn from to write your own
 
 #### Example 1
- 
 We'll require json for this particular test (as the elasticsearch api outputs in json)
 The project name is defined, then we specify the servers we're going to test, which can be a regex, for example ```servers elasticsearch-d[01-08]```
 
@@ -42,7 +42,6 @@ require 'json'
 project "Elasticsearch" do
   servers "localhost"
 ```
-
 
 We define the request to initiate, in this case to /_cluster/health, which will use http and connect to :9200.
 I'll let the comments for before_tests speak for themselves.
@@ -64,7 +63,6 @@ I'll let the comments for before_tests speak for themselves.
       end
 ```
 
-
 Here's our first test. Can't get much more basic that just checking to see if we get an HTTP status code of '200' back.
 If the response is true, you'll see a green check mark. False will return a red X.
 
@@ -73,7 +71,6 @@ If the response is true, you'll see a green check mark. False will return a red 
         r.code == '200'
       end
 ```
-
 
 Now we'll define an array called stats, which contains all the keys we want to retrieve values from in our /_cluster/health output.
 In this case, we'll just return the body of the response, as it's relatively small. You can of course parse this however you'd like for 
@@ -129,8 +126,8 @@ end
 ```
 
 #### Example 2
-* in addition to the straight forward servers:port association described in the example above, we can also define roles
-* roles are used much as in capistrano, and let us do things like the following:
+In addition to the straight forward servers:port association described in the example above, we can also define roles.
+Roles are used much as in capistrano, and let us do things like the following:
 
 ```ruby
 project "Imagine" do
@@ -144,10 +141,10 @@ project "Imagine" do
     ... test code ...
 ```
 
-* so here we assign a role of :fqdn to imagine.brewster.com, and :app to the machines that are actually running that app on the backend
-* we then override the default port in each case, since our app servers run the service on :9999, while the fqdn makes use of a vip and port translation to run on :443.
-* the upshot of this is that you can make use of roles and custom ports to deal with scenarios such as mulitple app servers for a given project running on different ports, or as is the case above, a public url for our app that uses a different port than our app servers.
-* you can of course assign given roles only to certain tests as well, e.g.
+So here we assign a role of :fqdn to imagine.brewster.com, and :app to the machines that are actually running that app on the backend.
+We then override the default port in each case, since our app servers run the service on :9999, while the fqdn makes use of a vip and port translation to run on :443.
+The upshot of this is that you can make use of roles and custom ports to deal with scenarios such as mulitple app servers for a given project running on different ports, or as is the case above, a public url for our app that uses a different port than our app servers.
+You can of course assign given roles only to certain tests as well, e.g.
 
 ```ruby
 project "ChronoSynclasticInfundibulum" do
@@ -175,12 +172,11 @@ project "ChronoSynclasticInfundibulum" do
 end
 ```
 
-* this will have the effect of only running the http tests against your :web servers, and only checking for the specified open ports on your :data servers
+This will have the effect of only running the http tests against your :web servers, and only checking for the specified open ports on your :data servers.
 
 ### Pull Requests
 * yes please
 * new plugins and genereal bug fixes, updates, etc are all welcome
-
 
 ### Command Line Auto-completion for Tests
 * BASH completion:
