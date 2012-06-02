@@ -211,6 +211,31 @@ elasticsearch
   Expected vs Actual Nodes  ✓
 ```
 
+unable to connect
+```
+[localhost]
+               role  Errno::ECONNREFUSED: Connection refused - connect(2)
+      redis_version  Errno::ECONNREFUSED: Connection refused - connect(2)
+     uptime_in_days  Errno::ECONNREFUSED: Connection refused - connect(2)
+  used_memory_human  Errno::ECONNREFUSED: Connection refused - connect(2)
+    blocked_clients  Errno::ECONNREFUSED: Connection refused - connect(2)
+   connected_slaves  Errno::ECONNREFUSED: Connection refused - connect(2)
+  connected_clients  Errno::ECONNREFUSED: Connection refused - connect(2)
+```
+
+failed check
+```
+[www.wickedawesome.com]
+  HTTP Sign-in moved permanently 301  ✓                    
+           HTTPS VIP Healthcheck 200  ✓                    
+                             Da Bomb  ✗                    
+        HTTPS Require Basic Auth 401  ✓                    
+                         API Version  0.1.0                
+       Logged in with Basic Auth 200  ✓                    
+           Logged in gets basic-page  ✓ 
+```
+
+
 ### Pull Requests
 * yes please
 * new plugins and genereal bug fixes, updates, etc are all welcome
