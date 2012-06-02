@@ -2,11 +2,11 @@
 
 ### Overview
 * auger is a DSL with which you can write tests for just about everything you run in your environment
-* these are the sort of questions auger can answer:
+* these are the sorts of questions auger can answer:
   * is port :80 on my application webservers open? does /index.html contain a response tag that we know should be served from a given backend data source?
   * is redis running? is it configured as a master? a slave?
   * is elasticsearch responding on all my hosts it should be? what's the cluster state? do I have the number of data nodes responding that we're supposed to have?
-* clearly a lot of this information include things you should be graphing. What auger wants to do it give you a really quick overview of current status: green == good, red == ruh roh!
+* clearly a lot of this information includes things you should be graphing. What auger wants to do it give you a really quick overview of current status: green == good, red == ruh roh!
 
 ### Currently Supported Plugins
 * http/s
