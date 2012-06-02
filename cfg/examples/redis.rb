@@ -12,6 +12,7 @@ project "Redis" do
       used_memory_human
       blocked_clients
       connected_slaves
+      connected_clients
     ]
 
 
