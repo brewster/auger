@@ -9,14 +9,17 @@
 * socket
 * cassandra
 
-### Usage
+### Insallation
 * gem install auger
-* if you want to run the latest source, git clone, bundle install, then call bin/aug and you should be set
-* sample configs included in cfg/examples/ can be moved into cfg/ and then run via ```aug redis```, etc. Edit as required for your env
+
+#### If you want to run the latest source:
+* ```git clone git@github.com/brewster/auger```
+* ```cd auger; rake build; gem install pkg/auger-x.x.x.gem```
+
+### Usage
+* sample configs included in cfg/examples/ can be moved into cfg/ and then run via ```aug redis```, etc
 * alternatively, you can place your configs anywhere you'd like and set the env_var AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage
 * then, you can call your tests via ```aug name_of_my_config```
-
-### Command Line Options
 * ```aug -l``` will print available tests
 * ```aug -h``` will print usage details
 
