@@ -239,6 +239,11 @@ failed check
 ### Pull Requests
 * yes please
 * new plugins and genereal bug fixes, updates, etc are all welcome
+* generally, we'd prefer you do the following to submit a pull:
+  * fork
+  * create a local topic branch
+  * make your changes and push
+  * submit your pull request
 
 ### Command Line Auto-completion for Tests
 * BASH completion:
