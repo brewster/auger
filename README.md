@@ -10,9 +10,9 @@
 * cassandra
 
 ### Usage
-* the binary, aug, can be placed in your PATH, or aliased: ```alias aug="/path/to/auger/bin/aug"``` (although not required)
-* ```bundle install```
-* sample configs included in examples/ can be moved into cfg/ and then run via ```aug redis```, etc. Edit as required for your env
+* gem install auger
+* if you want to run the latest source, git clone, bundle install, then call bin/aug and you should be set
+* sample configs included in cfg/examples/ can be moved into cfg/ and then run via ```aug redis```, etc. Edit as required for your env
 * alternatively, you can place your configs anywhere you'd like and set the env_var AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage
 * then, you can call your tests via ```aug name_of_my_config```
 
