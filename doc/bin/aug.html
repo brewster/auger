@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>aug - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/darkfish.js"></script>
+
+
+<body class="file">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="../index.html">Home</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="../Gemfile.html">Gemfile</a>
+  
+    <li class="file"><a href="../LICENSE.html">LICENSE</a>
+  
+    <li class="file"><a href="../Rakefile.html">Rakefile</a>
+  
+    <li class="file"><a href="../bin/aug.html">aug</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="../Auger.html">Auger</a>
+  
+    <li><a href="../Auger/Config.html">Auger::Config</a>
+  
+    <li><a href="../Auger/Connection.html">Auger::Connection</a>
+  
+    <li><a href="../Auger/Cql.html">Auger::Cql</a>
+  
+    <li><a href="../Auger/CqlRequest.html">Auger::CqlRequest</a>
+  
+    <li><a href="../Auger/Dns.html">Auger::Dns</a>
+  
+    <li><a href="../Auger/DnsDomainRequest.html">Auger::DnsDomainRequest</a>
+  
+    <li><a href="../Auger/DnsQueryRequest.html">Auger::DnsQueryRequest</a>
+  
+    <li><a href="../Auger/Http.html">Auger::Http</a>
+  
+    <li><a href="../Auger/HttpRequest.html">Auger::HttpRequest</a>
+  
+    <li><a href="../Auger/Project.html">Auger::Project</a>
+  
+    <li><a href="../Auger/Request.html">Auger::Request</a>
+  
+    <li><a href="../Auger/Result.html">Auger::Result</a>
+  
+    <li><a href="../Auger/Server.html">Auger::Server</a>
+  
+    <li><a href="../Auger/Socket.html">Auger::Socket</a>
+  
+    <li><a href="../Auger/SocketRequest.html">Auger::SocketRequest</a>
+  
+    <li><a href="../Auger/Telnet.html">Auger::Telnet</a>
+  
+    <li><a href="../Auger/TelnetRequest.html">Auger::TelnetRequest</a>
+  
+    <li><a href="../Auger/Test.html">Auger::Test</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation" class="description">
+  
+<p>AUGER_DIR = File.dirname(File.dirname(__FILE__)) AUGER_LIB =
+File.join(AUGER_DIR, ‘lib’)</p>
+
+<p>if <a href="http://'AUGER_CFG'">ENV</a> == nil</p>
+
+<pre>AUGER_CFG = File.join(AUGER_DIR, 'cfg').split</pre>
+
+<p>else</p>
+
+<pre>AUGER_CFG = ENV['AUGER_CFG'].split(':')</pre>
+
+<p>end</p>
+
+<p>## relative path to libs $LOAD_PATH.unshift(AUGER_LIB) unless
+$LOAD_PATH.include?(AUGER_LIB)</p>
+
+<p>require “rainbow” require “optparse” require “auger”</p>
+
+<p>options = {} optparse = OptionParser.new do |opts|</p>
+
+<pre class="ruby"><span class="ruby-identifier">opts</span>.<span class="ruby-identifier">banner</span> = <span class="ruby-string">&quot;Usage: aug [-h|--help] [-f|--fqdn] [-l|--list] cfg&quot;</span>
+
+<span class="ruby-keyword">if</span> <span class="ruby-constant">ARGV</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">nil</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">banner</span>.<span class="ruby-identifier">color</span>(:<span class="ruby-identifier">yellow</span>)
+  <span class="ruby-identifier">exit</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">'-l'</span>, <span class="ruby-string">'--list'</span>, <span class="ruby-string">'List available configs and exit.'</span>) <span class="ruby-keyword">do</span>
+  <span class="ruby-constant">AUGER_CFG</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{c}/*.rb&quot;</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">%r\.rb$/</span>, <span class="ruby-string">''</span>)}
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">exit</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">'-h'</span>, <span class="ruby-string">'--help'</span>, <span class="ruby-string">'Display help'</span>) <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-identifier">opts</span>
+  <span class="ruby-identifier">exit</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>end optparse.parse!</p>
+
+<p>## load plugins <a
+href="http://"#{AUGER_DIR}/lib/plugins/*.rb"">Dir</a>.each {|file| require
+file }</p>
+
+<p>## cfg file can be e.g. ‘imagine’ or relative path if <a
+href="http://0">File.exists?(ARGV</a>)</p>
+
+<pre>cfg = ARGV[0]</pre>
+
+<p>else</p>
+
+<pre class="ruby"><span class="ruby-constant">AUGER_CFG</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-node">&quot;#{path}/#{ARGV[0]}.rb&quot;</span>)
+    <span class="ruby-identifier">cfg</span> = <span class="ruby-node">&quot;#{path}/#{ARGV[0]}.rb&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>end</p>
+
+<p>## pretty ascii output for different result outcomes def
+format_outcome(outcome)</p>
+
+<pre class="ruby"><span class="ruby-keyword">case</span> <span class="ruby-identifier">outcome</span>
+<span class="ruby-keyword">when</span> <span class="ruby-constant">TrueClass</span> <span class="ruby-keyword">then</span>
+  <span class="ruby-string">&quot;\u2713&quot;</span>.<span class="ruby-identifier">color</span>(:<span class="ruby-identifier">green</span>)
+<span class="ruby-keyword">when</span> <span class="ruby-constant">MatchData</span> <span class="ruby-keyword">then</span> <span class="ruby-comment"># boolean if no captures, otherwise list captures</span>
+  (<span class="ruby-identifier">outcome</span>.<span class="ruby-identifier">captures</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;\u2713&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">outcome</span>.<span class="ruby-identifier">captures</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">' '</span>))
+    .<span class="ruby-identifier">color</span>(:<span class="ruby-identifier">green</span>)
+<span class="ruby-keyword">when</span> <span class="ruby-constant">FalseClass</span> <span class="ruby-keyword">then</span>
+  <span class="ruby-string">&quot;\u2717&quot;</span>.<span class="ruby-identifier">color</span>(:<span class="ruby-identifier">red</span>)
+<span class="ruby-keyword">when</span> <span class="ruby-constant">NilClass</span> <span class="ruby-keyword">then</span>
+  <span class="ruby-string">&quot;nil&quot;</span>.<span class="ruby-identifier">color</span>(:<span class="ruby-identifier">red</span>)
+<span class="ruby-keyword">when</span> <span class="ruby-constant">Exception</span> <span class="ruby-keyword">then</span>
+  <span class="ruby-node">&quot;#{outcome.class}: #{outcome.to_s}&quot;</span>.<span class="ruby-identifier">color</span>(:<span class="ruby-identifier">magenta</span>)
+<span class="ruby-keyword">else</span>
+  <span class="ruby-identifier">outcome</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">color</span>(:<span class="ruby-identifier">green</span>)
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>end</p>
+
+<p><a
+href="../Auger/Config.html#method-c-load">Auger::Config.load</a>.projects.each
+do |p|</p>
+
+<pre class="ruby"><span class="ruby-identifier">threads</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">h</span>,<span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>[<span class="ruby-identifier">k</span>] = [] }
+
+<span class="ruby-comment">## run tests</span>
+<span class="ruby-identifier">p</span>.<span class="ruby-identifier">connections</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">p</span>.<span class="ruby-identifier">servers</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">roles</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">server</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">threads</span>[<span class="ruby-identifier">server</span>.<span class="ruby-identifier">name</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">c</span>.<span class="ruby-identifier">do_requests</span>(<span class="ruby-identifier">server</span>)
+      <span class="ruby-identifier">c</span>.<span class="ruby-identifier">requests</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">request</span><span class="ruby-operator">|</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">do_tests</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment">## width of test name column</span>
+<span class="ruby-identifier">max_test_length</span> = 
+  <span class="ruby-identifier">p</span>.<span class="ruby-identifier">connections</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">requests</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">tests</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">length</span>}}}.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">max</span>
+
+<span class="ruby-comment">## print results</span>
+<span class="ruby-identifier">threads</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">server</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;[#{server.color(:cyan)}]&quot;</span>
+  <span class="ruby-identifier">threads</span>[<span class="ruby-identifier">server</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">thread</span><span class="ruby-operator">|</span> 
+    <span class="ruby-identifier">results</span> = <span class="ruby-identifier">thread</span>.<span class="ruby-identifier">value</span>    <span class="ruby-comment"># this waits on thread</span>
+    <span class="ruby-identifier">results</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">result</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">output</span> = <span class="ruby-identifier">format_outcome</span>(<span class="ruby-identifier">result</span>.<span class="ruby-identifier">outcome</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;  %+#{max_test_length}s  %-30s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">result</span>.<span class="ruby-identifier">test</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">output</span>]
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>end</p>
+
+</div>
+
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

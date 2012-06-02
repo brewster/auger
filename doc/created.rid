@@ -1,0 +1,23 @@
+Sat, 02 Jun 2012 08:16:50 -0400
+./bin/aug	Fri, 01 Jun 2012 20:25:32 -0400
+./cfg/examples/elasticsearch.rb	Fri, 01 Jun 2012 16:57:35 -0400
+./cfg/examples/redis.rb	Sat, 02 Jun 2012 08:01:22 -0400
+./cfg/examples/riak.rb	Fri, 01 Jun 2012 16:56:39 -0400
+./cfg/examples/webserver.rb	Fri, 01 Jun 2012 16:57:43 -0400
+./Gemfile	Fri, 01 Jun 2012 11:37:57 -0400
+./lib/auger/config.rb	Fri, 01 Jun 2012 14:30:55 -0400
+./lib/auger/connection.rb	Fri, 01 Jun 2012 20:25:32 -0400
+./lib/auger/project.rb	Fri, 01 Jun 2012 20:25:32 -0400
+./lib/auger/request.rb	Fri, 01 Jun 2012 14:30:55 -0400
+./lib/auger/result.rb	Fri, 01 Jun 2012 14:30:55 -0400
+./lib/auger/server.rb	Sat, 02 Jun 2012 07:33:12 -0400
+./lib/auger/test.rb	Fri, 01 Jun 2012 14:30:56 -0400
+./lib/auger/version.rb	Sat, 02 Jun 2012 08:02:30 -0400
+./lib/auger.rb	Fri, 01 Jun 2012 20:25:32 -0400
+./lib/plugins/cql.rb	Fri, 01 Jun 2012 20:25:32 -0400
+./lib/plugins/dns.rb	Fri, 01 Jun 2012 20:25:32 -0400
+./lib/plugins/http.rb	Fri, 01 Jun 2012 20:25:32 -0400
+./lib/plugins/socket.rb	Fri, 01 Jun 2012 20:25:32 -0400
+./lib/plugins/telnet.rb	Fri, 01 Jun 2012 20:25:32 -0400
+./LICENSE	Fri, 01 Jun 2012 10:42:45 -0400
+./Rakefile	Sat, 02 Jun 2012 08:15:19 -0400
