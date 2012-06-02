@@ -1,22 +1,28 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
+#
+require "rainbow"
+require "optparse"
+require "auger"
 
 AUGER_DIR = File.dirname(File.dirname(__FILE__))
 AUGER_LIB = File.join(AUGER_DIR, 'lib')
 
+## use AUGER_DIR/cfg unless AUGER_CFG is set
 if ENV['AUGER_CFG'] == nil
   AUGER_CFG = File.join(AUGER_DIR, 'cfg').split
 else
   AUGER_CFG = ENV['AUGER_CFG'].split(':')
 end
 
+## load plugins
+Dir["#{AUGER_DIR}/lib/plugins/*.rb"].each {|file| require file }
+
 ## relative path to libs
 $LOAD_PATH.unshift(AUGER_LIB) unless $LOAD_PATH.include?(AUGER_LIB)
 
-require "rainbow"
-require "optparse"
-require "auger"
 
+## set opts
 options = {}
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: aug [-h|--help] [-l|--list] cfg"
@@ -38,9 +44,6 @@ optparse = OptionParser.new do |opts|
   end
 end
 optparse.parse!
-
-## load plugins
-Dir["#{AUGER_DIR}/lib/plugins/*.rb"].each {|file| require file }
 
 ## cfg file can be e.g. 'imagine' or relative path
 if File.exists?(ARGV[0])
