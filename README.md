@@ -23,7 +23,7 @@
 
 ### Usage
 * sample configs included in cfg/examples/ can be moved into cfg/ and then run via ```aug redis```, etc
-* alternatively, you can place your configs anywhere you'd like and set the env_var AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage
+* alternatively, you can place your configs anywhere you'd like and set the env_var ```AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage```
   * now call your tests via ```aug name_of_my_config```
   * configs should be named some_name.rb
 * ```aug -l``` will print available tests
