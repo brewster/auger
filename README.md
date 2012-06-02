@@ -177,6 +177,7 @@ This will have the effect of only running the http tests against your :web serve
 ### Sample Output
 * here's the kind of thing you should expect to see from tests
 
+redis
 ```
 [prod-redis-r01]
                role  master               
@@ -192,6 +193,22 @@ This will have the effect of only running the http tests against your :web serve
   used_memory_human  1.37M                
     blocked_clients  0                    
    connected_slaves  0
+```
+
+elasticsearch
+```
+[prod-es-r07]
+                Status 200  ✓                    
+              cluster_name  brewster             
+                    status  green                
+           number_of_nodes  8                    
+      number_of_data_nodes  8                    
+     active_primary_shards  132                  
+             active_shards  396                  
+         relocating_shards  0                    
+       initializing_shards  0                    
+         unassigned_shards  0                    
+  Expected vs Actual Nodes  ✓
 ```
 
 ### Pull Requests
