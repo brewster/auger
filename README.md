@@ -199,7 +199,7 @@ elasticsearch
 ```
 [prod-es-r07]
                 Status 200  ✓                    
-              cluster_name  brewster             
+              cluster_name  wicked_awesome
                     status  green                
            number_of_nodes  8                    
       number_of_data_nodes  8                    
