@@ -6,6 +6,7 @@ project "Redis" do
     binmode false
 
     tests = %w[
+      role
       redis_version
       uptime_in_days
       used_memory_human
