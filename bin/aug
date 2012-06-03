@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 #
-load 'lib/auger.rb'
 require 'rainbow'
 require 'optparse'
 
 
 AUGER_DIR = File.dirname(File.dirname(__FILE__))
 AUGER_LIB = File.join(AUGER_DIR, 'lib')
+load "#{AUGER_LIB}/auger.rb"
 
 ## use AUGER_DIR/cfg unless AUGER_CFG is set
 if ENV['AUGER_CFG'] == nil
