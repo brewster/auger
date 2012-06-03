@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 #
-require "rainbow"
-require "optparse"
-require "auger"
+load 'lib/auger.rb'
+require 'rainbow'
+require 'optparse'
+
 
 AUGER_DIR = File.dirname(File.dirname(__FILE__))
 AUGER_LIB = File.join(AUGER_DIR, 'lib')
@@ -38,8 +39,14 @@ optparse = OptionParser.new do |opts|
     end
     exit
   end
+
   opts.on('-h', '--help', 'Display help') do
     puts opts
+    exit
+  end
+
+  opts.on('-v', '--version', 'Display version and exit.') do
+    puts "auger, version #{Auger::VERSION}"
     exit
   end
 end
