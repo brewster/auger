@@ -26,7 +26,7 @@ $LOAD_PATH.unshift(AUGER_LIB) unless $LOAD_PATH.include?(AUGER_LIB)
 ## set opts
 options = {}
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: aug [-h|--help] [-l|--list] cfg"
+  opts.banner = "Usage: aug [-h|--help] [-l|--list] [-v|--version] cfg"
 
   if ARGV[0] == nil
     puts opts.banner.color(:yellow)
