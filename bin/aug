@@ -3,11 +3,11 @@
 #
 require 'rainbow'
 require 'optparse'
+require 'auger'
 
 
 AUGER_DIR = File.dirname(File.dirname(__FILE__))
 AUGER_LIB = File.join(AUGER_DIR, 'lib')
-load "#{AUGER_LIB}/auger.rb"
 
 ## use AUGER_DIR/cfg unless AUGER_CFG is set
 if ENV['AUGER_CFG'] == nil
