@@ -41,24 +41,24 @@ the following plugins:
 
 ### If you want to run the latest source:
 
-* ```git clone git@github.com/blah/auger``` TODO => fix github url
+* `git clone git@github.com/blah/auger` TODO => fix github url
 
-* ```cd auger; rake install```
+* `cd auger; rake install`
 
 ## Command-line client usage
 
 * sample configs included in cfg/examples/ can be moved into cfg/ and
-  then run via ```aug redis```, etc
+  then run via `aug redis`, etc
 
 * alternatively, you can place your configs anywhere you'd like and
-  set the env_var: ```AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage```
+  set the env_var: `AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage`
 
-  * now call your tests via ```aug name_of_my_config```
+  * now call your tests via `aug name_of_my_config`
 
   * configs should be named some_name.rb
 
-* ```aug -l``` will print available tests
-* ```aug -h``` will print usage details
+* `aug -l` will print available tests
+* `aug -h` will print usage details
 
 ## Writing tests
 
@@ -68,6 +68,7 @@ environment variable.
 
 ### Example 1 - testing a webserver response
 
+```ruby
     project "Front-end Web Servers" do
       server "web-fe-[01-02]"
       
@@ -80,6 +81,7 @@ environment variable.
       end
 
     end
+```
 
 The `project` command takes a project description, and a block containing multiple
 tests to be run together for that project.
@@ -110,6 +112,7 @@ Save the config to a file `fe_web` and run with the `aug` command:
 
 Let's extend our example to be more interesting.
 
+```ruby
     project "Front-end Web Servers" do
       server 'web-fe-[01-02]', :web
       server 'www.mydomain.com', :vip, :port => 80
@@ -144,6 +147,7 @@ Let's extend our example to be more interesting.
       end
 
     end
+```
 
 Servers can have roles attached to them, in this case `:web` and
 `:vip`. By default a connection will be run for all servers, but the
@@ -171,6 +175,7 @@ a checkmark or an 'x'.
 
 ### Example 3 - testing ElasticSearch
 
+```ruby
     require 'json'
 
     project "Elasticsearch" do
@@ -228,11 +233,12 @@ a checkmark or an 'x'.
     end
   end
 end
+```
 
 ## Writing plugins
 
 Let's look at a simplified http plugin.
-
+```ruby
     require "net/http"
 
     module Auger
@@ -267,6 +273,7 @@ Let's look at a simplified http plugin.
       end
 
     end
+```
 
 First, we add the `http` method to the Project class. This simply causes
 the 'http' command to add a connection of class Http to the project's
@@ -310,3 +317,4 @@ ZSH completion:
   * make your changes and push
 
   * submit your pull request
+
