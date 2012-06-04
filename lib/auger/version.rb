@@ -1,3 +1,3 @@
 module Auger
-  VERSION = "1.0.8"
+  VERSION = File.read(File.join(File.dirname(__FILE__), "..", "..", "VERSION"))
 end
