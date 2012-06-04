@@ -18,7 +18,7 @@
 * gem install auger
 
 #### If you want to run the latest source:
-* ```git clone git@github.com/brewster/auger```
+* ```git clone git@github.com/blah/auger``` TODO => fix github url
 * ```cd auger; rake build; gem install pkg/auger-x.x.x.gem```
 
 ### Usage
@@ -131,7 +131,7 @@ Roles are used much as in capistrano, and let us do things like the following:
 
 ```ruby
 project "Imagine" do
-  servers "imagine.brewster.com", :fqdn, :port => 443
+  servers "imagine.something.com", :fqdn, :port => 443
   servers "prod-dims-r[01-10]", :app, :port => 9999
 
   https do
