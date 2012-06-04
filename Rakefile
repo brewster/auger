@@ -58,13 +58,14 @@ task :version do
   puts <<HELP
 Available commands are:
 -----------------------
-rake version:write[version]   # set custom version in the x.x.x-? format
-rake version:patch            # increment the patch x.x.x+1 (keeps any flags on)
-rake version:minor            # increment minor and reset patch x.x+1.0 (keeps any flags on)
-rake version:major            # increment major and reset others x+1.0.0 (keeps any flags on)
+rake version:write[version]   # set version explicitly
+rake version:patch            # increment the patch x.x.x+1
+rake version:minor            # increment minor and reset patch x.x+1.0
+rake version:major            # increment major and reset others x+1.0.0
 
 HELP
   puts "Current version is: #{version.color(:green)}"
+  puts "NOTE: version should always be in the format of x.x.x".color(:red)
 end
 
 namespace :version do
