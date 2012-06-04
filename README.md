@@ -51,9 +51,7 @@ the following plugins:
   then run via ```aug redis```, etc
 
 * alternatively, you can place your configs anywhere you'd like and
-  set the env_var:
-  
-  ```AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage```
+  set the env_var: ```AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage```
 
   * now call your tests via ```aug name_of_my_config```
 
