@@ -3,25 +3,17 @@
 #
 require 'rainbow'
 require 'optparse'
-require 'auger'
-
 
 AUGER_DIR = File.dirname(File.dirname(__FILE__))
 AUGER_LIB = File.join(AUGER_DIR, 'lib')
+AUGER_CFG = (ENV['AUGER_CFG'] || File.join(AUGER_DIR, 'cfg')).split(File::PATH_SEPARATOR)
 
-## use AUGER_DIR/cfg unless AUGER_CFG is set
-if ENV['AUGER_CFG'] == nil
-  AUGER_CFG = File.join(AUGER_DIR, 'cfg').split
-else
-  AUGER_CFG = ENV['AUGER_CFG'].split(':')
-end
+## relative path to libs (in case not installed as a gem)
+$LOAD_PATH.unshift(AUGER_LIB) unless $LOAD_PATH.include?(AUGER_LIB)
+require 'auger'
 
 ## load plugins
 Dir["#{AUGER_DIR}/lib/plugins/*.rb"].each {|file| require file }
-
-## relative path to libs
-$LOAD_PATH.unshift(AUGER_LIB) unless $LOAD_PATH.include?(AUGER_LIB)
-
 
 ## set opts
 options = {}
@@ -34,9 +26,10 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('-l', '--list', 'List available configs and exit.') do
-    AUGER_CFG.each do |c|
-      puts Dir["#{c}/*.rb"].map {|file| File.basename(file).sub(/\.rb$/, '')}
+    list = AUGER_CFG.map do |dir| 
+      Dir["#{dir}/*.rb"].map{ |file| File.basename(file).sub(/\.rb$/, '') } 
     end
+    puts list.flatten.sort
     exit
   end
 
@@ -46,22 +39,21 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('-v', '--version', 'Display version and exit.') do
-    puts "auger, version #{Auger::VERSION}"
+    puts Auger::VERSION
     exit
   end
 end
 optparse.parse!
 
 ## cfg file can be e.g. 'imagine' or relative path
-if File.exists?(ARGV[0])
-  cfg = ARGV[0]
-else
-  AUGER_CFG.each do |path|
-    if File.exists?("#{path}/#{ARGV[0]}.rb")
-      cfg = "#{path}/#{ARGV[0]}.rb"
-    end
+cfg = 
+  if File.exists?(ARGV[0])
+    ARGV[0]
+  elsif path = AUGER_CFG.find { |path| File.exists?("#{path}/#{ARGV[0]}.rb") }
+    [path, "#{ARGV[0]}.rb"].join(File::SEPARATOR)
+  else
+    raise ArgumentError, "config #{ARGV[0]} not found"
   end
-end
 
 ## pretty ascii output for different result outcomes
 def format_outcome(outcome)
