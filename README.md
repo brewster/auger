@@ -43,7 +43,7 @@ the following plugins:
 
 * ```git clone git@github.com/blah/auger``` TODO => fix github url
 
-* ```cd auger; rake build; gem install pkg/auger-x.x.x.gem```
+* ```cd auger; rake install```
 
 ## Command-line client usage
 
