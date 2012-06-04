@@ -69,18 +69,18 @@ environment variable.
 ### Example 1 - testing a webserver response
 
 ```ruby
-    project "Front-end Web Servers" do
-      server "web-fe-[01-02]"
+project "Front-end Web Servers" do
+  server "web-fe-[01-02]"
       
-      http 8000 do
-        get '/' do
-          test 'status code is 200' do |response|
-            response.code == '200'
-          end
-        end
+  http 8000 do
+    get '/' do
+      test 'status code is 200' do |response|
+        response.code == '200'
       end
-
     end
+  end
+
+end
 ```
 
 The `project` command takes a project description, and a block containing multiple
@@ -113,40 +113,40 @@ Save the config to a file `fe_web` and run with the `aug` command:
 Let's extend our example to be more interesting.
 
 ```ruby
-    project "Front-end Web Servers" do
-      server 'web-fe-[01-02]', :web
-      server 'www.mydomain.com', :vip, :port => 80
+project "Front-end Web Servers" do
+  server 'web-fe-[01-02]', :web
+  server 'www.mydomain.com', :vip, :port => 80
       
-      socket 8000 do
-        roles :web
-        open? do
-          test "port 8000 is open?"
-        end
-      end
-
-      http 8000 do
-        roles :web, :vip
-
-        get '/' do
-          test 'status code is 200' do |response|
-            response.code == '200'
-          end
-
-          test 'document title' do |response|
-            response.body.match /<title>([\w\s]+)<\/title>/
-          end
-        end
-
-        get '/image.png' do
-          header 'user-agent: Auger Test'
-
-          test 'image.png has correct content-type' do |respose|
-            response['Content-Type'] == 'image/png'
-          end
-        end
-      end
-
+  socket 8000 do
+    roles :web
+    open? do
+      test "port 8000 is open?"
     end
+  end
+
+  http 8000 do
+    roles :web, :vip
+
+    get '/' do
+      test 'status code is 200' do |response|
+        response.code == '200'
+      end
+
+      test 'document title' do |response|
+        response.body.match /<title>([\w\s]+)<\/title>/
+      end
+    end
+
+    get '/image.png' do
+      header 'user-agent: Auger Test'
+
+      test 'image.png has correct content-type' do |respose|
+        response['Content-Type'] == 'image/png'
+      end
+    end
+  end
+
+end
 ```
 
 Servers can have roles attached to them, in this case `:web` and
@@ -176,103 +176,102 @@ a checkmark or an 'x'.
 ### Example 3 - testing ElasticSearch
 
 ```ruby
-    require 'json'
+require 'json'
 
-    project "Elasticsearch" do
-      servers 'prod-es-[01-04]'
+project "Elasticsearch" do
+  servers 'prod-es-[01-04]'
 
-      http 9200 do
-        get "/_cluster/health" do
+  http 9200 do
+    get "/_cluster/health" do
 
-        # this runs after request returns, but before tests
-        # use it to munge response body from json string into a hash
-        before_tests do |r|
-          r.body = JSON.parse(r.body)
-        end
-
-        test "Status 200" do |r|
-          r.code == '200'
-        end
-
-        # Now we'll define an array called stats, which contains all the keys we
-        # want to retrieve values from in our /_cluster/health output.  In this
-        # case, we'll just return the body of the response, as it's relatively
-        # small. You can of course parse this however you'd like for this or
-        # other cases.
-        stats = %w[
-          cluster_name
-          status
-          timed_out
-          number_of_nodes
-          number_of_data_nodes
-          active_primary_shards
-          active_shards
-          relocating_shards
-          initializing_shards
-          unassigned_shards
-        ]
-
-        stats.each do |stat|
-          test "#{stat}" do |r|
-            r.body[stat]
-          end
-        end
-
-        # I've discovered that a typical fail case with elasticsearch is 
-        #   that on occassion, nodes will come up and not join the cluster
-        # This is an easy way to see if the number of nodes that the host 
-        #   actually sees (actual_data_nodes) matches what we're
-        #   expecting (expected_data_nodes).
-        # TODO: dynamically update expected_data_nodes based on defined hosts:
-        test "Expected vs Actual Nodes" do |r|
-          r.body['number_of_data_nodes'] == 8
-        end
-
-      end
-
+    # this runs after request returns, but before tests
+    # use it to munge response body from json string into a hash
+    before_tests do |r|
+      r.body = JSON.parse(r.body)
     end
+
+    test "Status 200" do |r|
+      r.code == '200'
+    end
+
+    # Now we'll define an array called stats, which contains all the keys we
+    # want to retrieve values from in our /_cluster/health output.  In this
+    # case, we'll just return the body of the response, as it's relatively
+    # small. You can of course parse this however you'd like for this or
+    # other cases.
+    stats = %w[
+      cluster_name
+      status
+      timed_out
+      number_of_nodes
+      number_of_data_nodes
+      active_primary_shards
+      active_shards
+      relocating_shards
+      initializing_shards
+      unassigned_shards
+    ]
+
+    stats.each do |stat|
+      test "#{stat}" do |r|
+        r.body[stat]
+      end
+    end
+
+    # I've discovered that a typical fail case with elasticsearch is 
+    #   that on occassion, nodes will come up and not join the cluster
+    # This is an easy way to see if the number of nodes that the host 
+    #   actually sees (actual_data_nodes) matches what we're
+    #   expecting (expected_data_nodes).
+    # TODO: dynamically update expected_data_nodes based on defined hosts:
+    test "Expected vs Actual Nodes" do |r|
+      r.body['number_of_data_nodes'] == 8
+    end
+
   end
+
 end
 ```
 
 ## Writing plugins
 
 Let's look at a simplified http plugin.
+
 ```ruby
-    require "net/http"
+require "net/http"
 
-    module Auger
+module Auger
 
-      class Project
-        def http(port = 80, &block)
-          @connections << Http.load(port, &block)
-        end
-      end
-
-      class Http < Auger::Connection
-        def open(host, options)
-          http = Net::HTTP.new(host, options[:port])
-          http.start
-          http
-        end
-
-        def close(http)
-          http.finish
-        end
-
-        def get(url, &block)
-          @requests << Auger::HttpRequest.load(url, &block)
-        end
-      end
-
-      class HttpRequest < Auger::Request
-        def run(http)
-          get = Net::HTTP::Get.new(@arg)
-          http.request(get)
-        end
-      end
-
+  class Project
+    def http(port = 80, &block)
+      @connections << Http.load(port, &block)
     end
+  end
+
+  class Http < Auger::Connection
+    def open(host, options)
+      http = Net::HTTP.new(host, options[:port])
+      http.start
+      http
+    end
+
+    def close(http)
+      http.finish
+    end
+
+    def get(url, &block)
+      @requests << Auger::HttpRequest.load(url, &block)
+    end
+  end
+
+  class HttpRequest < Auger::Request
+    def run(http)
+      get = Net::HTTP::Get.new(@arg)
+      http.request(get)
+    end
+  end
+
+end
 ```
 
 First, we add the `http` method to the Project class. This simply causes
