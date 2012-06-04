@@ -288,13 +288,39 @@ instance of the relevant request object.
 ## Command Line Auto-completion for aug tool
 
 BASH completion:
+```bash
+_augcomp()
+{
+  # our cache file location
+  augcache="/tmp/.aug_cache"
 
-    function _augcomp () {
-      augcfgs=$(aug -l|xargs) local word=${COMP_WORDS[COMP_CWORD]}
-      COMPREPLY=($(compgen -W "$augcfgs" -- "${word}"))
-    }
-    complete -F _augcomp aug
+  # our counter file location
+  augcounter="/tmp/.aug_counter"
 
+  # times to use the cache before re-generating
+  count=100
+
+  # if the cache or the counter don't exist, create
+  if [ ! -f "$augcache" ] || [ ! -f "$augcounter" ]
+  then
+    aug -l >$augcache && echo 0 >$augcounter
+  else
+    # if the counter reaches $count, re-generate the complete list
+    if [ $(cat "$augcounter") -eq "$count" ]
+    then
+      aug -l >$augcache && echo 0 >$augcounter
+    # if the counter hasn't reached $count, increment it
+    else
+      expr $(cat $augcounter) + 1 >$augcounter
+    fi
+  fi
+
+  augcfgs=$(cat /tmp/.aug.cache|xargs)
+  word=${COMP_WORDS[COMP_CWORD]}
+  COMPREPLY=($(compgen -W "$augcfgs" -- "${word}"))
+}
+complete -F _augcomp aug
+```
 
 ZSH completion:
 
