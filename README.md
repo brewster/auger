@@ -315,7 +315,7 @@ _augcomp()
     fi
   fi
 
-  augcfgs=$(cat /tmp/.aug.cache|xargs)
+  augcfgs=$(cat "$augcache" | xargs)
   word=${COMP_WORDS[COMP_CWORD]}
   COMPREPLY=($(compgen -W "$augcfgs" -- "${word}"))
 }
