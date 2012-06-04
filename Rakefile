@@ -2,6 +2,7 @@
 require "bundler/gem_tasks"
 require "rainbow"
 
+## begin version management
 def valid? version
   pattern = /^\d+\.\d+\.\d+(\-(dev|beta|rc\d+))?$/
   raise "Tried to set invalid version: #{version}".color(:red) unless version =~ pattern
@@ -98,4 +99,5 @@ namespace :version do
   end
   
 end
+## end version management
 
