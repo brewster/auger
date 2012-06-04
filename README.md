@@ -141,7 +141,7 @@ project "Imagine" do
     ... test code ...
 ```
 
-So here we assign a role of :fqdn to imagine.brewster.com, and :app to the machines that are actually running that app on the backend.
+So here we assign a role of :fqdn to imagine.something.com, and :app to the machines that are actually running that app on the backend.
 We then override the default port in each case, since our app servers run the service on :9999, while the fqdn makes use of a vip and port translation to run on :443.
 The upshot of this is that you can make use of roles and custom ports to deal with scenarios such as mulitple app servers for a given project running on different ports, or as is the case above, a public url for our app that uses a different port than our app servers.
 You can of course assign given roles only to certain tests as well, e.g.
