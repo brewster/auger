@@ -3,6 +3,7 @@ gem 'host_range'
 gem 'rainbow'
 gem 'cassandra-cql'
 gem 'net-dns'
+gem 'redis'
 gem 'json'
 
 group :development do
