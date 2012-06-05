@@ -287,7 +287,7 @@ instance of the relevant request object.
 
 ## Command Line Auto-completion for aug tool
 
-BASH completion:
+BASH completion (with a rolling cache, if you're incredibly impatient like me...):
 ```bash
 _augcomp()
 {
