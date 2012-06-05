@@ -42,7 +42,7 @@ the following plugins:
 ### If you want to run the latest source:
 
 * `git clone git@github.com/blah/auger` TODO => fix github url
-* `cd auger; rake install`
+* `cd auger; bundle install && rake install`
 
 ## Command-line client usage
 
