@@ -1,3 +1,4 @@
+#require 'redis/connection'
 require 'redis'
 
 module Auger
@@ -10,7 +11,7 @@ module Auger
 
   class Redis < Auger::Connection
     def open(host, options)
-      ::Redis.new(options.merge(:host => host))
+      ::Redis.new options.merge({:host => host, :thread_safe => true})
     end
 
     def close(redis)
