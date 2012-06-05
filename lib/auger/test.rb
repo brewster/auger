@@ -2,14 +2,22 @@ module Auger
   
   class Test
     attr_accessor :name, :block
+
     def initialize(name, block)
       @name = name
       @block = block
     end
     
-    ## you can call test with no block if you just want to return response value
+    ## return Auger::Result object with outcome of test
     def run(response)
-      @block ? @block.call(response) : response
+      outcome =
+        if response.is_a?(Exception) or @block.nil?
+          response
+        else
+          @block.call(response) rescue $!
+        end
+
+      Auger::Result.new(self, outcome)
     end
 
   end

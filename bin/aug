@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
-#
+
 require 'rainbow'
 require 'optparse'
 
@@ -74,23 +74,28 @@ def format_outcome(outcome)
   end
 end
 
-Auger::Config.load(cfg).projects.each do |p|
+Auger::Config.load(cfg).projects.each do |project|
 
   threads = Hash.new { |h,k| h[k] = [] }
 
   ## run tests
-  p.connections.each do |c|
-    p.servers(c.roles).map do |server|
+  project.connections.each do |connection|
+    project.servers(connection.roles).map do |server|
       threads[server.name] << Thread.new do
-        c.do_requests(server)
-        c.requests.map { |request| request.do_tests }
+        conn = connection.do_open(server)
+        connection.requests.map do |request|
+          response = request.do_run(conn)
+          request.tests.map do |test|
+            test.run(response)
+          end
+        end
       end
     end
   end
 
   ## width of test name column
   max_test_length = 
-    p.connections.map{|c| c.requests.map{|r| r.tests.map{|t| t.name.length}}}.flatten.max
+    project.connections.map{|c| c.requests.map{|r| r.tests.map{|t| t.name.length}}}.flatten.max
 
   ## print results
   threads.keys.each do |server|

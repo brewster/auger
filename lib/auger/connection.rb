@@ -24,22 +24,16 @@ module Auger
       @options[method] = arg
     end
 
-    def do_requests(server)
+    ## call plugin open() and return plugin-specific connection object, or exception
+    def do_open(server)
       options = @options.merge(server.options)
-
       begin
-        conn = self.open(server.name, options)
-        @requests.each do |request|
-          request.response = request.run(conn) rescue $!
-        end
-        self.close(conn)
+        self.open(server.name, options)
       rescue => e
-        @requests.each do |request|
-          request.response = e  # response can be an Exception if we caught one
-        end
+        e
       end
     end
-
+    
   end
   
 end

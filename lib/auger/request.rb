@@ -23,21 +23,15 @@ module Auger
       @before_tests_proc = block
     end
 
-    ## returns array of Auger::Result objects for tests
-    def do_tests
-      ## callback to be run before tests
-      if self.before_tests_proc
-        self.before_tests_proc.call(@response) rescue @response = $!
-      end
-
-      ## run tests
-      @tests.map do |test|
-        outcome = if @response.is_a? Exception 
-                    @response   # just return the exception
-                  else
-                    test.run(@response) rescue $!
-                  end
-        Auger::Result.new(test, outcome)
+    ## call plugin run() and return plugin-specfic response object or exception
+    def do_run(conn)
+      return conn if conn.is_a? Exception
+      begin
+        response = self.run(conn)
+        response = self.before_tests_proc.call(response) if self.before_tests_proc
+        response
+      rescue => e
+        e
       end
     end
 
