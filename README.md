@@ -48,7 +48,9 @@ the following plugins:
 ## Command-line client usage
 
 * sample configs included in cfg/examples/ can be moved into cfg/ and
-  then run via `aug redis`, etc
+  then run via `aug redis` etc.
+  * if you've installed as a gem, the examples will be located wherever your gems get installed
+  * one quick way to find them should be `cd $GEM_HOME/gems/auger-x.x.x/cfg/examples`
 
 * alternatively, you can place your configs anywhere you'd like and
   set the env_var: `AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage`
