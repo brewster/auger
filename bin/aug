@@ -36,7 +36,7 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('-v', '--version', 'Display version and exit.') do
-    puts Auger::VERSION
+    puts Auger::VERSION.color(:green)
     exit
   end
 end
