@@ -42,22 +42,23 @@ the following plugins:
 ### If you want to run the latest source:
 
 * `git clone git@github.com/blah/auger` TODO => fix github url
-
 * `cd auger; rake install`
 
 ## Command-line client usage
 
 * sample configs included in cfg/examples/ can be moved into cfg/ and
   then run via `aug redis` etc.
+
   * if you've installed as a gem, the examples will be located wherever your gems get installed
+
   * one quick way to find them should be `cd $GEM_HOME/gems/auger-x.x.x/cfg/examples`
 
 * alternatively, you can place your configs anywhere you'd like and
   set the env_var: `AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage`
 
-  * now call your tests via `aug name_of_my_config`
+  * now call your tests via `aug name_of_my_config`, e.g. `aug redis`
 
-  * configs should be named some_name.rb
+  * configs should take the format `name.rb`
 
 * `aug -l` will print available tests
 * `aug -h` will print usage details
@@ -334,16 +335,10 @@ ZSH completion:
 ## Pull Requests
 
 * yes please
-
 * new plugins and genereal bug fixes, updates, etc are all welcome
-
 * generally, we'd prefer you do the following to submit a pull:
-
   * fork
-
   * create a local topic branch
-
   * make your changes and push
-
   * submit your pull request
 
