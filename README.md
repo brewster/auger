@@ -21,7 +21,7 @@ implmenting automated tests.
     that we're supposed to have?
 
 * clearly a lot of this information includes things you should be
-  graphing. What auger wants to do it give you a really quick overview
+  graphing. What auger wants to do is give you a quick overview
   of current status: green == good, red == ruh roh!
 
 ## Plugins
