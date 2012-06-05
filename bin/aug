@@ -12,9 +12,6 @@ AUGER_CFG = (ENV['AUGER_CFG'] || File.join(AUGER_DIR, 'cfg')).split(File::PATH_S
 $LOAD_PATH.unshift(AUGER_LIB) unless $LOAD_PATH.include?(AUGER_LIB)
 require 'auger'
 
-## load plugins
-Dir["#{AUGER_DIR}/lib/plugins/*.rb"].each {|file| require file }
-
 ## set opts
 options = {}
 optparse = OptionParser.new do |opts|
@@ -44,6 +41,9 @@ optparse = OptionParser.new do |opts|
   end
 end
 optparse.parse!
+
+## load plugins
+Dir["#{AUGER_DIR}/lib/plugins/*.rb"].each {|file| require file }
 
 ## cfg file can be e.g. 'imagine' or relative path
 cfg = 
