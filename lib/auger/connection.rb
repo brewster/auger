@@ -32,7 +32,7 @@ module Auger
         @requests.each do |request|
           request.response = request.run(conn) rescue $!
         end
-        self.close conn
+        self.close(conn)
       rescue => e
         @requests.each do |request|
           request.response = e  # response can be an Exception if we caught one

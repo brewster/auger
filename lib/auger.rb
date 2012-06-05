@@ -1,3 +1,4 @@
+require 'auger/version'
 require 'auger/config'
 require 'auger/project'
 require 'auger/server'
