@@ -291,14 +291,9 @@ BASH completion (with file completion and a rolling cache, if you're incredibly 
 ```bash
 _augcomp()
 {
-  # our cache file location
-  augcache="/tmp/.aug_cache"
-
-  # our counter file location
-  augcounter="/tmp/.aug_counter"
-
-  # times to use the cache before re-generating
   count=100
+  augcache="/tmp/.aug_cache"
+  augcounter="/tmp/.aug_counter"
 
   # if the cache or the counter don't exist, create
   if [ ! -f "$augcache" ] || [ ! -f "$augcounter" ]
