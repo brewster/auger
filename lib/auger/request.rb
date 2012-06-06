@@ -1,7 +1,7 @@
 module Auger
 
   class Request 
-    attr_accessor :tests, :before_tests_proc, :response, :arg
+    attr_accessor :tests, :before_tests_proc, :arg
 
     def self.load(arg, &block)
       request = new(arg)
