@@ -33,6 +33,14 @@ module Auger
       end.load(nil, &block)
     end
 
+    def version(&block)
+      @requests << Class.new(Auger::Request) do
+        def run(cassandra)
+          cassandra.version
+        end
+      end.load(nil, &block)
+    end
+
     def schema_agreement?(&block)
       @requests << Class.new(Auger::Request) do
         def run(cassandra)
