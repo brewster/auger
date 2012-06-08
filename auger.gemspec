@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency('net-dns'       , '>= 0.7.1')
   gem.add_dependency('rainbow'       , '>=1.1.4')
   gem.add_dependency('host_range'    , '>=0.0.1')
+  gem.add_dependency('cassandra'     , '>=0.12.1')
   gem.add_dependency('cassandra-cql' , '>= 1.0.4')
 end
 
