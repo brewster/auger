@@ -10,7 +10,7 @@ module Auger
     end
 
     def initialize(port)
-      @options = {:port => port}
+      @options = {:port => port, :timeout => 5}
       @roles = []
       @requests = []
     end
@@ -18,6 +18,11 @@ module Auger
     def roles(*names)
       @roles += names if names
       @roles
+    end
+
+    ## explicit method to override use of timeout.rb in modules
+    def timeout(secs)
+      @options[:timeout] = secs
     end
 
     def method_missing(method, arg)

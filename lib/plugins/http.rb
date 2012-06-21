@@ -25,6 +25,8 @@ module Auger
       http = Net::HTTP.new(host, options[:port])
       http.use_ssl = options[:ssl]
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE if options[:insecure]
+      http.open_timeout = options[:timeout]
+      http.read_timeout = options[:timeout]
       http.start
       http
     end
