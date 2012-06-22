@@ -59,6 +59,14 @@ module Auger
 
     alias :fqdn :fqdns
 
+    def tests
+      @connections.map do |connection|
+        connection.requests.map do |request|
+          request.tests.map { |test| test }
+        end
+      end.flatten
+    end
+
   end
   
 end

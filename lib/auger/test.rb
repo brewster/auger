@@ -1,7 +1,7 @@
 module Auger
   
   class Test
-    attr_accessor :name, :block
+    attr_accessor :name, :block, :id
 
     def initialize(name, block)
       @name = name
