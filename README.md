@@ -110,7 +110,7 @@ the result in green or red), for example:
 
 ```ruby
     test 'http status code' do |response|
-      Result(r.code, r.code == '200')
+      Result(response.code, response.code == '200')
     end
 ```
 
