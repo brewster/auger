@@ -14,10 +14,12 @@ module Auger
         if response.is_a?(Exception) or @block.nil?
           response
         else
-          @block.call(response) rescue $!
+          @block.call(response) rescue $! # run the test
         end
 
-      Auger::Result.new(self, outcome)
+      result = outcome.is_a?(Result) ? outcome : Auger::Result.new(outcome)
+      result.test = self
+      result
     end
 
   end

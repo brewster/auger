@@ -74,6 +74,32 @@ def format_outcome(outcome)
   end
 end
 
+## pretty-print Result object
+module Auger
+  class Result
+    def format
+      output = 
+        case self.outcome
+        when TrueClass  then "\u2713"
+        when MatchData  then outcome.captures.empty? ? "\u2713" : outcome.captures.join(' ')
+        when FalseClass then "\u2717"
+        when NilClass   then "nil"
+        when Exception  then "#{outcome.class}: #{outcome.to_s}"
+        else                 outcome.to_s
+        end
+
+      color =
+        case self.status
+        when FalseClass, NilClass then :red
+        when Exception            then :magenta
+        else                           :green
+        end
+    
+      return output.color(color)
+    end
+  end
+end
+
 Auger::Config.load(cfg).projects.each do |project|
 
   threads = Hash.new { |h,k| h[k] = [] }
@@ -103,8 +129,7 @@ Auger::Config.load(cfg).projects.each do |project|
     threads[server].each do |thread| 
       results = thread.value    # this waits on thread
       results.flatten.each do |result|
-        output = format_outcome(result.outcome)
-        puts "  %+#{max_test_length}s  %-30s" % [result.test.name, output]
+        puts "  %+#{max_test_length}s  %-30s" % [result.test.name, result.format]
       end
     end
   end
