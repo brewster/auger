@@ -55,25 +55,6 @@ cfg =
     raise ArgumentError, "config #{ARGV[0]} not found"
   end
 
-## pretty ascii output for different result outcomes
-def format_outcome(outcome)
-  case outcome
-  when TrueClass then
-    "\u2713".color(:green)
-  when MatchData then # boolean if no captures, otherwise list captures
-    (outcome.captures.empty? ? "\u2713" : outcome.captures.join(' '))
-      .color(:green)
-  when FalseClass then
-    "\u2717".color(:red)
-  when NilClass then
-    "nil".color(:red)
-  when Exception then
-    "#{outcome.class}: #{outcome.to_s}".color(:magenta)
-  else
-    outcome.to_s.color(:green)
-  end
-end
-
 ## pretty-print Result object
 module Auger
   class Result
