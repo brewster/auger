@@ -11,7 +11,7 @@ module Auger
 
   class Redis < Auger::Connection
     def open(host, options)
-      ::Redis.new options.merge({:host => host, :thread_safe => true})
+      ::Redis.new options.merge({:host => host, :thread_safe => true, :port => options[:port]})
     end
 
     def close(redis)
