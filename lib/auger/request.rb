@@ -18,6 +18,11 @@ module Auger
       @tests << Test.new(name, block)
     end
 
+    ## called within test block to return a Result object
+    def Result(*args)
+      Auger::Result.new(*args)
+    end
+
     ## callback to be run after request, but before tests
     def before_tests(&block)
       @before_tests_proc = block

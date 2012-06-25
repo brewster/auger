@@ -103,6 +103,19 @@ a request, in the case of `http` the response is an HTTP::Reponse object.
 and the response is passed to a block. The result of executing the block is
 presented as the result of this test (in this case true or false).
 
+For better control over the result, it is possible to construct and
+return an Auger::Result object, with an outcome (string to be
+printed) and a boolean status (which aug client will use to print
+the result in green or red), for example:
+
+```ruby
+    test 'http status code' do |response|
+      Result(response.code, response.code == '200')
+    end
+```
+
+will always show the code, in green if 200, red otherwise.
+
 Save the config to a file `fe_web` and run with the `aug` command:
 
     $ aug ./fe_web

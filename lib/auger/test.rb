@@ -1,7 +1,7 @@
 module Auger
   
   class Test
-    attr_accessor :name, :block
+    attr_accessor :name, :block, :id
 
     def initialize(name, block)
       @name = name
@@ -14,10 +14,12 @@ module Auger
         if response.is_a?(Exception) or @block.nil?
           response
         else
-          @block.call(response) rescue $!
+          @block.call(response) rescue $! # run the test
         end
 
-      Auger::Result.new(self, outcome)
+      result = outcome.is_a?(Result) ? outcome : Auger::Result.new(outcome)
+      result.test = self
+      result
     end
 
   end
