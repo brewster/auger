@@ -90,7 +90,7 @@ module Auger
     def run(http)
       request = Net::HTTP::const_get(@method.capitalize).new(@arg) # e.g. Net::HTTP::Get
       request.basic_auth(@user, @password || '') if @user
-      @headers.each { |k,v| get[k] = v }
+      @headers.each { |k,v| request[k] = v }
       request.set_form_data(@data)
       http.request(request)
     end
