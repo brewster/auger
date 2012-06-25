@@ -1,3 +1,23 @@
+## HTTP plugin for auger; requests look like this:
+##
+##   http 80 do
+##
+##     get "/foo" do
+##       header "User-Agent: AugerExample/1.0"
+##       test "HTTP Status Code" do |r|
+##         Result r.code, r.code == 200
+##       end
+##     end
+##
+##     post "/bar" do
+##       data :a => "hello", :b => "world"
+##       test "POST request body" do |r|
+##         r.body
+##       end
+##     end
+##
+##   end
+
 require "net/http"
 
 module Auger
@@ -17,8 +37,11 @@ module Auger
 
   class Http < Auger::Connection
     def get(url, &block)
-      @url = url
-      @requests << Auger::HttpRequest.load(url, &block)
+      @requests << Auger::HttpGet.load(url, &block)
+    end
+
+    def post(url, &block)
+      @requests << Auger::HttpPost.load(url, &block)
     end
 
     def open(host, options)
@@ -38,11 +61,17 @@ module Auger
   end
 
   class HttpRequest < Auger::Request
-    attr_accessor :headers, :user, :password
+    attr_accessor :method, :headers, :user, :password, :data
 
     def initialize(url)
+      @method ||= :get          # default
       @headers = {}
+      @data = {}
       super
+    end
+
+    def data(hash)
+      @data = hash
     end
 
     def header(h)
@@ -59,12 +88,27 @@ module Auger
     end
 
     def run(http)
-      get = Net::HTTP::Get.new(@arg)
-      get.basic_auth(@user, @password||'') if @user
+      request = Net::HTTP::const_get(@method.capitalize).new(@arg) # e.g. Net::HTTP::Get
+      request.basic_auth(@user, @password || '') if @user
       @headers.each { |k,v| get[k] = v }
-      http.request(get)
+      request.set_form_data(@data)
+      http.request(request)
     end
 
+  end
+
+  class HttpGet < Auger::HttpRequest
+    def initialize(url)
+      @method = :get
+      super
+    end
+  end
+
+  class HttpPost < Auger::HttpRequest
+    def initialize(url)
+      @method = :post
+      super
+    end
   end
 
 end
