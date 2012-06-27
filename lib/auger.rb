@@ -7,6 +7,12 @@ require 'auger/request'
 require 'auger/test'
 require 'auger/result'
 
+require 'auger/plugin/dns.rb'
+require 'auger/plugin/http.rb'
+require 'auger/plugin/redis.rb'
+require 'auger/plugin/socket.rb'
+require 'auger/plugin/telnet.rb'
+
 module Auger
   ##
 end

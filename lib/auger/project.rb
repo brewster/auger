@@ -23,7 +23,6 @@ module Auger
     def role(name, *args)
       options = args.last.is_a?(Hash) ? args.pop : {}
       servers = args.map { |arg| HostRange.parse(arg) }.flatten
-      #servers.each { |server| roles[name] << server }
       servers.each { |server| roles[name] << Auger::Server.new(server, options) }
     end
 
