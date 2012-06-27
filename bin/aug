@@ -35,15 +35,16 @@ optparse = OptionParser.new do |opts|
     exit
   end
 
+  opts.on('-s', '--server REGEX', 'Limit to server names matching regex.') do |s|
+    options[:server] = s
+  end
+
   opts.on('-v', '--version', 'Display version and exit.') do
     puts Auger::VERSION.color(:green)
     exit
   end
 end
 optparse.parse!
-
-## load plugins
-Dir["#{AUGER_DIR}/lib/plugins/*.rb"].each {|file| require file }
 
 ## cfg file can be e.g. 'imagine' or relative path
 cfg = 
@@ -87,7 +88,9 @@ Auger::Config.load(cfg).projects.each do |project|
 
   ## run tests
   project.connections.each do |connection|
-    project.servers(connection.roles).map do |server|
+    servers = project.servers(connection.roles)
+    servers.select! { |server| server.name.match(options[:server]) } if options[:server]
+    servers.map do |server|
       threads[server.name] << Thread.new do
         conn = connection.do_open(server)
         connection.requests.map do |request|
