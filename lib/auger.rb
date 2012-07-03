@@ -6,7 +6,9 @@ require 'auger/connection'
 require 'auger/request'
 require 'auger/test'
 require 'auger/result'
+require 'auger/status'
 
+## plugins
 require 'auger/plugin/dns.rb'
 require 'auger/plugin/http.rb'
 require 'auger/plugin/redis.rb'

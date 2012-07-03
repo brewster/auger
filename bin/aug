@@ -59,6 +59,7 @@ cfg =
 ## pretty-print Result object
 module Auger
   class Result
+
     def format
       output = 
         case self.outcome
@@ -74,6 +75,13 @@ module Auger
         case self.status
         when FalseClass, NilClass then :red
         when Exception            then :magenta
+        when Status               then
+          case self.status.value
+            when :ok        then :green
+            when :warn      then :yellow
+            when :exception then :magenta
+          else                   :red
+          end
         else                           :green
         end
     

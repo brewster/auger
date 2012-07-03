@@ -23,6 +23,11 @@ module Auger
       Auger::Result.new(*args)
     end
 
+    ## called within test block to return a Status object
+    def Status(*args)
+      Auger::Status.new(*args)
+    end
+
     def before_request(&block)
       @before_request_proc = block
     end
