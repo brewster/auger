@@ -1,7 +1,7 @@
 module Auger
 
   class Request 
-    attr_accessor :tests, :before_tests_proc, :arg
+    attr_accessor :tests, :before_tests_proc, :before_request_proc, :arg
 
     def self.load(arg, &block)
       request = new(arg)
@@ -23,6 +23,10 @@ module Auger
       Auger::Result.new(*args)
     end
 
+    def before_request(&block)
+      @before_request_proc = block
+    end
+
     ## callback to be run after request, but before tests
     def before_tests(&block)
       @before_tests_proc = block
@@ -32,7 +36,10 @@ module Auger
     def do_run(conn)
       return conn if conn.is_a? Exception
       begin
-        response = self.run(conn)
+        arg = @arg
+        arg = self.before_request_proc.call(conn) if self.before_request_proc
+
+        response = self.run(conn, arg)
         response = self.before_tests_proc.call(response) if self.before_tests_proc
         response
       rescue => e

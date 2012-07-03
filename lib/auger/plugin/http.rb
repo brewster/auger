@@ -62,6 +62,7 @@ module Auger
 
   class HttpRequest < Auger::Request
     attr_accessor :method, :headers, :user, :password, :data
+    alias_method :url, :arg
 
     def initialize(url)
       @method ||= :get          # default
@@ -87,8 +88,8 @@ module Auger
       @password = password
     end
 
-    def run(http)
-      request = Net::HTTP::const_get(@method.capitalize).new(@arg) # e.g. Net::HTTP::Get
+    def run(http, url)
+      request = Net::HTTP::const_get(@method.capitalize).new(url) # e.g. Net::HTTP::Get
       request.basic_auth(@user, @password || '') if @user
       @headers.each { |k,v| request[k] = v }
       request.set_form_data(@data)
