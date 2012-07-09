@@ -41,32 +41,32 @@ module Auger
   end
 
   class RedisPing < Auger::Request
-    def run(redis)
+    def run(redis, arg)
       redis.ping
     end
   end
 
   class RedisInfo < Auger::Request
-    def run(redis)
+    def run(redis, arg)
       redis.info
     end
   end
 
   class RedisDbsize < Auger::Request
-    def run(redis)
+    def run(redis, arg)
       redis.dbsize
     end
   end
 
   class RedisGet < Auger::Request
-    def run(redis)
-      redis.get(@arg)
+    def run(redis, arg)
+      redis.get(arg)
     end
   end
 
   class RedisExists < Auger::Request
-    def run(redis)
-      redis.exists(@arg)
+    def run(redis, arg)
+      redis.exists(arg)
     end
   end
 

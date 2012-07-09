@@ -29,8 +29,8 @@ module Auger
   end
 
   class TelnetRequest < Auger::Request
-    def run(telnet)
-      telnet.cmd(@arg)
+    def run(telnet, arg)
+      telnet.cmd(arg)
     end
   end
 
