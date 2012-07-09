@@ -22,7 +22,7 @@ module Auger
   end
 
   class SocketRequest < Auger::Request
-    def run(socket)
+    def run(socket, arg)
       socket ? true : false      
     end
   end

@@ -39,6 +39,10 @@ optparse = OptionParser.new do |opts|
     options[:server] = s
   end
 
+  opts.on('-t', '--time', 'Show request times.') do |t|
+    options[:time] = true
+  end
+
   opts.on('-v', '--version', 'Display version and exit.') do
     puts Auger::VERSION.color(:green)
     exit
@@ -102,9 +106,11 @@ Auger::Config.load(cfg).projects.each do |project|
       threads[server.name] << Thread.new do
         conn = connection.do_open(server)
         connection.requests.map do |request|
-          response = request.do_run(conn)
+          response, time = request.do_run(conn)
           request.tests.map do |test|
-            test.run(response)
+            result = test.run(response)
+            result.time = time
+            result
           end
         end
       end
@@ -121,7 +127,9 @@ Auger::Config.load(cfg).projects.each do |project|
     threads[server].each do |thread| 
       results = thread.value    # this waits on thread
       results.flatten.each do |result|
-        puts "  %+#{max_test_length}s  %-30s" % [result.test.name, result.format]
+        output = "  %+#{max_test_length}s  %-30s" % [result.test.name, result.format]
+        output << "[#{result.time}]".color(:blue) if options[:time]
+        puts output
       end
     end
   end

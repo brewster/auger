@@ -44,9 +44,11 @@ module Auger
         arg = @arg
         arg = self.before_request_proc.call(conn) if self.before_request_proc
 
+        start = Time.now
         response = self.run(conn, arg)
+        time = Time.now - start
         response = self.before_tests_proc.call(response) if self.before_tests_proc
-        response
+        return response, time
       rescue => e
         e
       end
