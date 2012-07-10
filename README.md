@@ -33,7 +33,6 @@ the following plugins:
 * http - http and https requests using `net/http`
 * telnet - send arbitrary commands to a port using `net/telnet`
 * socket - test whether a port is open
-* cassandra - CQL requests using `cassandra-cql` gem
 
 ## Installation
 
