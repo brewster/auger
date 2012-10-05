@@ -349,3 +349,7 @@ ZSH completion:
   * make your changes and push
   * submit your pull request
 
+## License
+
+Auger is distributed under the MIT license. See the attached LICENSE
+file for all the sordid details.
