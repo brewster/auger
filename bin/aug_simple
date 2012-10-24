@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+
+## this is the simplest auger client, written for educational purposes;
+## not intended for actual use
+
+AUGER_DIR = File.dirname(File.dirname(__FILE__))
+AUGER_LIB = File.join(AUGER_DIR, 'lib')
+
+## relative path to libs (in case not installed as a gem)
+$LOAD_PATH.unshift(AUGER_LIB) unless $LOAD_PATH.include?(AUGER_LIB)
+require "auger"
+
+## load plugins
+Dir["#{File.dirname(File.dirname(__FILE__))}/lib/plugins/*.rb"].each { |file| require file }
+
+## load config file and loop projects
+Auger::Config.load(ARGV[0]).projects.each do |project|
+
+  project.servers.each do |server|
+    puts "[#{server.name}]"
+
+    project.connections(*server.roles).each do |connection|
+      conn = connection.try_open(server)
+      
+      connection.requests.each do |request|
+        response, time = request.try_run(conn)
+
+        request.tests.each do |test|
+          result = test.run(response)
+          puts "  #{test.name}: #{result.outcome}"
+        end
+
+      end
+
+      connection.try_close(conn)
+
+    end
+    
+  end
+  
+end
