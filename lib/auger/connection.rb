@@ -30,7 +30,7 @@ module Auger
     end
 
     ## call plugin open() and return plugin-specific connection object, or exception
-    def do_open(server)
+    def try_open(server)
       options = @options.merge(server.options)
       begin
         self.open(server.name, options)
@@ -39,6 +39,15 @@ module Auger
       end
     end
     
+    ## safe way to call plugin close() (rescue if the connection did not exist)
+    def try_close(conn)
+      begin
+        self.close(conn)
+      rescue => e
+        e
+      end
+    end
+
   end
   
 end
