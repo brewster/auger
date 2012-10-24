@@ -38,7 +38,7 @@ module Auger
     end
 
     ## call plugin run() and return plugin-specfic response object or exception
-    def do_run(conn)
+    def try_run(conn)
       return conn if conn.is_a? Exception
       begin
         arg = @arg
