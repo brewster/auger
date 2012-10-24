@@ -8,21 +8,21 @@ The primary goal of Auger is test-driven operations: unit testing for
 application admins. The library can also be used as a framework for
 implmenting automated tests.
 
-* these are the sorts of questions auger can answer:
+These are the sorts of questions auger can answer:
 
-  * is port :80 on my application webservers open? does /index.html
+* is port :80 on my application webservers open? does /index.html
     contain a response tag that we know should be served from a given
     backend data source?
 
-  * is redis running? is it configured as a master? a slave?
+* is redis running? is it configured as a master? a slave?
 
-  * is elasticsearch responding on all my hosts it should be? what's
+* is elasticsearch responding on all my hosts it should be? what's
     the cluster state? do I have the number of data nodes responding
     that we're supposed to have?
 
-* clearly a lot of this information includes things you should be
-  graphing. What auger wants to do is give you a quick overview
-  of current status: green == good, red == ruh roh!
+Clearly a lot of this information includes things you should be
+graphing. What auger wants to do is give you a quick overview
+of current status: green == good, red == ruh roh!
 
 ## Plugins
 
@@ -30,43 +30,38 @@ Specific protocols are implemented using plugins, which are designed
 to be easy to write wrappers on existing gems. Auger currently includes
 the following plugins:
 
-* http - http and https requests using `net/http`
-* telnet - send arbitrary commands to a port using `net/telnet`
 * socket - test whether a port is open
+* telnet - send arbitrary commands to a port using `net/telnet`
+* http - http and https requests using `net/http`
+* redis - query redis db info, keys, etc
+* dns - domain and query requests for testing a DNS server
 
 ## Installation
 
-* gem install auger
+    gem install auger
 
 ### If you want to run the latest source:
 
-* `git clone git@github.com/brewster/auger`
-* `cd auger; bundle install && rake install`
+    git clone git@github.com/brewster/auger
+    cd auger; bundle install && rake install
 
 ## Command-line client usage
 
-* sample configs included in cfg/examples/ can be moved into cfg/ and
-  then run via `aug redis` etc.
+`aug -h` will print usage details.
 
-  * if you've installed as a gem, the examples will be located wherever your gems get installed
+Sample configs are included in `auger/cfg/examples` (if installed as a
+gem, look in `$GEM_HOME/gems/auger-x.x.x/cfg/examples`). Use them as a
+basis to write your own tests, which auger can find in one of three ways:
 
-  * one quick way to find them should be `cd $GEM_HOME/gems/auger-x.x.x/cfg/examples`
+* in the directory `auger/cfg`
+* from the config load path defined in environment variable `AUGER_CFG`.
+  e.g. `AUGER_CFG=~/aug_cfg/prod:~/aug_cfg/staging`
+* using a relative path
 
-* alternatively, you can place your configs anywhere you'd like and
-  set the env_var: `AUGER_CFG=/path/to/your/configs/prod:/path/to/your/configs/stage`
+Reference config files using `aug foo`, to find `foo.rb` in
+`auger/cfg` or `AUGER_CFG` path, or `aug path/to/foo.rb` to find it directly.
 
-  * now call your tests via `aug name_of_my_config`, e.g. `aug redis`
-
-  * configs should take the format `name.rb`
-
-* `aug -l` will print available tests
-* `aug -h` will print usage details
-
-## Writing tests
-
-Tests are written as ruby code describing a test configuration. Files 
-containing tests should be placed in the path described by the `AUGER_CFG`
-environment variable.
+`aug -l` will print available config files in `AUGER_CFG` path.
 
 ### Example 1 - testing a webserver response
 
@@ -341,13 +336,15 @@ ZSH completion:
 
 ## Pull Requests
 
-* yes please
-* new plugins and genereal bug fixes, updates, etc are all welcome
-* generally, we'd prefer you do the following to submit a pull:
-  * fork
-  * create a local topic branch
-  * make your changes and push
-  * submit your pull request
+Yes please.
+
+New plugins and general bug fixes, updates, etc are all welcome.
+
+Generally, we'd prefer you do the following to submit a pull:
+* fork
+* create a local topic branch
+* make your changes and push
+* submit your pull request
 
 ## License
 
