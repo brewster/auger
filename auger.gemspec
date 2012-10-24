@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["rlister@gmail.com", "heffergm@gmail.com"]
   gem.description   = %q{Auger: test-driven ops}
   gem.summary       = %q{App && infrastructure testing DSL}
-  gem.homepage      = "https://rubygems.org/gems/auger"
+  gem.homepage      = "https://github.com/brewster/auger"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
