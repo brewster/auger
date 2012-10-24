@@ -2,7 +2,7 @@
 
 The Auger library implements a ruby DSL for describing tests to be run
 against remote applications on multiple servers. The gem includes
-'aug', a multi-threaded command-line client.
+'aug', a multi-process command-line client.
 
 The primary goal of Auger is test-driven operations: unit testing for
 application admins. The library can also be used as a framework for
