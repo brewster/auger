@@ -189,7 +189,7 @@ a checkmark or an 'x'.
 require 'json'
 
 project "Elasticsearch" do
-  servers 'prod-es-[01-04]'
+  server 'prod-es-[01-04]'
 
   http 9200 do
     get "/_cluster/health" do
