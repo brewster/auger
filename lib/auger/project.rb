@@ -3,7 +3,7 @@ require 'host_range'
 module Auger
 
   class Project
-    attr_accessor :name, :fqdns, :hosts, :connections, :roles
+    attr_accessor :name, :connections, :servers
     
     def self.load(name, &block)
       project = new(name)
@@ -13,50 +13,42 @@ module Auger
 
     def initialize(name)
       @name = name
-      @hosts = []
-      @fqdns = []
+      @servers = []
       @connections = []
-      @roles = Hash.new { |h,k| h[k] = [] }
       self
     end
 
-    def role(name, *args)
-      options = args.last.is_a?(Hash) ? args.pop : {}
-      servers = args.map { |arg| HostRange.parse(arg) }.flatten
-      servers.each { |server| roles[name] << Auger::Server.new(server, options) }
-    end
-
+    ## set server, or list of server names, with optional roles and options
+    ## e.g. server server1, server2, :roleA, :roleB, options => values
     def server(*args)
       options = args.last.is_a?(Hash) ? args.pop : {}
-      roles = []
-      servers = []
-      args.each do |arg|
-        case arg
-        when Symbol then roles << arg
-        when String then servers << arg
-        else raise ArgumentError, "illegal argument to server: #{arg}"
-        end
+      roles = args.select { |arg| arg.class == Symbol }
+      servers = args.select { |arg| arg.class == String }.map { |arg| HostRange.parse(arg) }
+      @servers += servers.flatten.map do |name|
+        Auger::Server.new(name, *roles, options)
       end
-      roles = [nil] if roles.empty? # default role
-      roles.each { |name| role(name, *servers, options) }
     end
 
-    alias :hosts :server
-
-    ## return array of servers for given array of roles (default to all)
-    def servers(roles = [])
-      (roles.empty? ? @roles.values : @roles.values_at(*roles))
-        .flatten
+    ## get list of server objects (optionally matching list of roles)
+    def servers(*roles)
+      if roles.empty?
+        @servers
+      else
+        roles.map do |role|
+          @servers.select { |server| server.roles.include?(role) }
+        end.flatten.uniq
+      end
     end
 
-    alias :host :hosts
-
-    ## add fqdn or return list of fqdns
-    def fqdns(*ranges)
-      ranges.empty? ? @fqdns.flatten : @fqdns << [*ranges].map {|r| HostRange.parse(r)}
+    ## return all connections, or those matching list of roles;
+    ## connections with no roles match all, or find intersection with roles list
+    def connections(*roles)
+      if roles.empty?
+        @connections
+      else
+        @connections.select { |c| c.roles.empty? or !(c.roles & roles).empty? }
+      end
     end
-
-    alias :fqdn :fqdns
 
     def tests
       @connections.map do |connection|
