@@ -14,19 +14,11 @@ require 'auger'
 
 ## set opts
 options = {}
-optparse = OptionParser.new do |opts|
+OptionParser.new do |opts|
   opts.banner = "Usage: aug [-h|--help] [-l|--list] [-v|--version] cfg"
 
   if ARGV[0] == nil
     puts opts.banner.color(:yellow)
-    exit
-  end
-
-  opts.on('-l', '--list', 'List available configs and exit.') do
-    list = AUGER_CFG.map do |dir| 
-      Dir["#{dir}/*.rb"].map{ |file| File.basename(file).sub(/\.rb$/, '') } 
-    end
-    puts list.flatten.sort
     exit
   end
 
@@ -35,37 +27,28 @@ optparse = OptionParser.new do |opts|
     exit
   end
 
-  opts.on('-s', '--server REGEX', 'Limit to server names matching regex.') do |s|
-    options[:server] = s
-  end
-
-  opts.on('-t', '--time', 'Show request times.') do |t|
-    options[:time] = true
-  end
-
   opts.on('-v', '--version', 'Display version and exit.') do
-    puts Auger::VERSION.color(:green)
+    puts Auger::VERSION
     exit
   end
-end
-optparse.parse!
 
-## cfg file can be e.g. 'imagine' or relative path
-cfg = 
-  if File.exists?(ARGV[0])
-    ARGV[0]
-  elsif path = AUGER_CFG.find { |path| File.exists?("#{path}/#{ARGV[0]}.rb") }
-    [path, "#{ARGV[0]}.rb"].join(File::SEPARATOR)
-  else
-    raise ArgumentError, "config #{ARGV[0]} not found"
+  opts.on('-l', '--list', 'List available configs and exit.') do
+    puts(AUGER_CFG.map do |dir|
+           Dir["#{dir}/*.rb"].map{ |file| File.basename(file).sub(/\.rb$/, '') } 
+         end.flatten.sort)
+    exit
   end
+end.parse!
+
+## load plugins
+Dir["#{File.dirname(File.dirname(__FILE__))}/lib/plugins/*.rb"].each { |file| require file }
 
 ## pretty-print Result object
 module Auger
   class Result
 
     def format
-      output = 
+      output =
         case self.outcome
         when TrueClass  then "\u2713"
         when MatchData  then outcome.captures.empty? ? "\u2713" : outcome.captures.join(' ')
@@ -88,48 +71,61 @@ module Auger
           end
         else                           :green
         end
-    
+
       return output.color(color)
     end
   end
 end
 
+## find cfg in path, or just use local file
+cfg = AUGER_CFG.map do |path|
+  File.join(path, "#{ARGV[0]}.rb")
+end.find do |file|
+  File.exists?(file)
+end || ARGV[0]
+
+## load config file and loop projects
 Auger::Config.load(cfg).projects.each do |project|
 
-  threads = Hash.new { |h,k| h[k] = [] }
+  servers = project.servers.map do |server|
 
-  ## run tests
-  project.connections.each do |connection|
-    servers = project.servers(connection.roles)
-    servers.select! { |server| server.name.match(options[:server]) } if options[:server]
-    servers.map do |server|
-      threads[server.name] << Thread.new do
-        conn = connection.do_open(server)
-        connection.requests.map do |request|
-          response, time = request.do_run(conn)
+    pipes = project.connections(*server.roles).map do |connection|
+      read, write = IO.pipe
+
+      Process.fork do
+        read.close              # child does not need
+        conn = connection.try_open(server)
+
+        responses = connection.requests.map do |request|
+          response, time = request.try_run(conn)
           request.tests.map do |test|
-            result = test.run(response)
-            result.time = time
-            result
+            [ test.name, test.run(response).format ]
           end
         end
+
+        Marshal.dump(responses, write)
+        connection.try_close(conn)
       end
+
+      write.close               # parent does not need
+      read                      # return the pipe
     end
+
+    [ server, pipes ]           # return server and its read pipes
   end
 
+  Process.waitall
+
   ## width of test name column
-  max_test_length = 
-    project.connections.map{|c| c.requests.map{|r| r.tests.map{|t| t.name.length}}}.flatten.max
+  max_test_length = project.tests.map { |test| test.name.length }.max
 
   ## print results
-  threads.keys.each do |server|
-    puts "[#{server.color(:cyan)}]"
-    threads[server].each do |thread| 
-      results = thread.value    # this waits on thread
-      results.flatten.each do |result|
-        output = "  %+#{max_test_length}s  %-30s" % [result.test.name, result.format]
-        output << "[#{result.time}]".color(:blue) if options[:time]
-        puts output
+  servers.each do |server, pipes|
+    puts "[#{server.name.color(:cyan)}]"
+
+    pipes.each do |pipe|
+      Marshal.load(pipe).flatten(1).each do |test, result|
+        puts "  %+#{max_test_length}s  %-30s" % [ test, result ]
       end
     end
   end
