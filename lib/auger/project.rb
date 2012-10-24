@@ -50,6 +50,7 @@ module Auger
       end
     end
 
+    ## return list of all test objects for this project
     def tests
       @connections.map do |connection|
         connection.requests.map do |request|
