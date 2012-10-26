@@ -38,6 +38,11 @@ OptionParser.new do |opts|
          end.flatten.sort)
     exit
   end
+
+  opts.on('-T', '--tunnel [USER@]HOST', 'Set a [user@]host to use as ssh tunnel.') do |t|
+    options[:tunnel] = t
+  end
+
 end.parse!
 
 ## load plugins
@@ -88,6 +93,7 @@ end || ARGV[0]
 Auger::Config.load(cfg).projects.each do |project|
 
   servers = project.servers.map do |server|
+    server.options[:tunnel] = options[:tunnel]
 
     pipes = project.connections(*server.roles).map do |connection|
       read, write = IO.pipe
