@@ -9,13 +9,11 @@ module Auger
   end
   
   class Dns < Auger::Connection
-    def domain(&block)
-      @requests << DnsDomainRequest.load(nil, &block)
-    end
-
     def open(host, options)
       options[:nameserver] = host
-      dns = Net::DNS::Resolver.new(options)
+      ## resolver checks args and raises error if no matching method, so only pass valid options
+      safe_options = options.select{ |key| Net::DNS::Resolver.method_defined? key }
+      dns = Net::DNS::Resolver.new(safe_options)
       dns.use_tcp = true if options[:use_tcp]
       dns
     end
@@ -24,19 +22,23 @@ module Auger
       dns = nil
     end
 
+    def domain(&block)
+      @requests << DnsDomainRequest.load(nil, &block)
+    end
+
     def query(name, &block)
       @requests << DnsQueryRequest.load(name, &block)
     end
   end
 
   class DnsDomainRequest < Auger::Request
-    def run(dns)
+    def run(dns, ignored_arg)
       dns.domain
     end
   end
   
   class DnsQueryRequest < Auger::Request
-    def run(dns)
+    def run(dns, ignored_arg)
       dns.query(@arg)
     end
   end
