@@ -6,6 +6,7 @@ gem 'rainbow'
 gem 'net-dns'
 gem 'redis'
 gem 'json'
+gem 'net-ssh-gateway'
 
 group :development do
   gem 'gemcutter'
