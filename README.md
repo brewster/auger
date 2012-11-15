@@ -68,7 +68,7 @@ Reference config files using `aug foo`, to find `foo.rb` in
 ```ruby
 project "Front-end Web Servers" do
   server "web-fe-[01-02]"
-      
+
   http 8000 do
     get '/' do
       test 'status code is 200' do |response|
@@ -126,7 +126,7 @@ Let's extend our example to be more interesting.
 project "Front-end Web Servers" do
   server 'web-fe-[01-02]', :web
   server 'www.mydomain.com', :vip, :port => 80
-      
+
   socket 8000 do
     roles :web
     open? do
@@ -167,11 +167,26 @@ Servers can also have a hash of options, which will override
 the matching connection options for just that server. In this case
 we want to connect to port 80 on the vip rather than 8000.
 
+Server names may be given as strings (which will be parsed by HostRange),
+as arrays (or expressions returning arrays), or as a block returning
+an array. All arrays will be flattened. Hence the following are all
+equivalent:
+
+```ruby
+server "foo1", "foo2", "foo3"
+server "foo[1-3]"
+server HostRange.parse("foo[1-3]")
+server [ "foo1", "foo2", "foo3" ]
+server do
+  %w{ foo1 foo2 foo3 }
+end
+```
+
 The `header` command demonstrates setting options for a request,
 in this case setting an http request header.
 
 The `socket` command creates a connection to the given port, and
-`open?` returns true if the port is open. We just apply this to 
+`open?` returns true if the port is open. We just apply this to
 the real web servers and not the vip.
 
 The document title test demonstrates how to extract and return a regex
@@ -228,9 +243,9 @@ project "Elasticsearch" do
       end
     end
 
-    # I've discovered that a typical fail case with elasticsearch is 
+    # I've discovered that a typical fail case with elasticsearch is
     #   that on occassion, nodes will come up and not join the cluster
-    # This is an easy way to see if the number of nodes that the host 
+    # This is an easy way to see if the number of nodes that the host
     #   actually sees (actual_data_nodes) matches what we're
     #   expecting (expected_data_nodes).
     # TODO: dynamically update expected_data_nodes based on defined hosts:
