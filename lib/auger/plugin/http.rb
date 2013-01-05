@@ -44,6 +44,10 @@ module Auger
       @requests << Auger::HttpPost.load(url, &block)
     end
 
+    def propfind(url, &block)
+      @requests << Auger::HttpPropfind.load(url, &block)
+    end
+
     def open(host, options)
       http = Net::HTTP.new(host, options[:port])
       http.use_ssl = options[:ssl]
@@ -61,7 +65,7 @@ module Auger
   end
 
   class HttpRequest < Auger::Request
-    attr_accessor :method, :headers, :user, :password, :data
+    attr_accessor :method, :headers, :user, :password, :data, :body
     alias_method :url, :arg
 
     def initialize(url)
@@ -73,6 +77,10 @@ module Auger
 
     def data(hash)
       @data = hash
+    end
+
+    def body(string)
+      @body = string
     end
 
     def header(h)
@@ -93,6 +101,7 @@ module Auger
       request.basic_auth(@user, @password || '') if @user
       @headers.each { |k,v| request[k] = v }
       request.set_form_data(@data)
+      request.body = @body
       http.request(request)
     end
 
@@ -108,6 +117,13 @@ module Auger
   class HttpPost < Auger::HttpRequest
     def initialize(url)
       @method = :post
+      super
+    end
+  end
+
+  class HttpPropfind < Auger::HttpRequest
+    def initialize(url)
+      @method = :propfind
       super
     end
   end
