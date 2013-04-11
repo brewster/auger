@@ -357,7 +357,7 @@ results and charts of response times.
 
 ## Ports
 
-[Augen](https://github.com/simoneb/augen.git) is an ongoing attempt to
+[Augen](https://github.com/simoneb/augen) is an ongoing attempt to
 port auger to .NET.
 
 ## Pull Requests
