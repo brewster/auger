@@ -354,6 +354,17 @@ ZSH completion:
     _augprojects () { _files; compadd $(aug -l) }
     compdef _augprojects aug
 
+## Augweb
+
+Auger now has a simple web interface,
+[augweb](http://github.com/brewster/augweb), showing tabulated test
+results and charts of response times.
+
+## Ports
+
+[Augen](https://github.com/simoneb/augen) is an ongoing attempt to
+port auger to .NET.
+
 ## Pull Requests
 
 Yes please.
