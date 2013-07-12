@@ -16,10 +16,11 @@ Gem::Specification.new do |gem|
   gem.version       = Auger::VERSION
 
   # dependencies
-  gem.add_dependency('json'          , '>= 1.7.3')
-  gem.add_dependency('redis'         , '>= 3.0.1')
-  gem.add_dependency('net-dns'       , '>= 0.7.1')
-  gem.add_dependency('rainbow'       , '>=1.1.4')
-  gem.add_dependency('host_range'    , '>=0.0.1')
+  gem.add_dependency('json'           , '>= 1.7.3')
+  gem.add_dependency('redis'          , '>= 3.0.1')
+  gem.add_dependency('net-dns'        , '>= 0.7.1')
+  gem.add_dependency('rainbow'        , '>=1.1.4')
+  gem.add_dependency('host_range'     , '>=0.0.1')
+  gem.add_dependency('net-ssh-gateway', '>=1.2.0')
 end
 
