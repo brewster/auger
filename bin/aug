@@ -126,14 +126,19 @@ Auger::Config.load(cfg).projects.each do |project|
   max_test_length = project.tests.map { |test| test.name.length }.max
 
   ## print results
+  failed = false
   servers.each do |server, pipes|
     puts "[#{server.name.color(:cyan)}]"
 
     pipes.each do |pipe|
       Marshal.load(pipe).flatten(1).each do |test, result|
+        if !failed && !result.include?("✓")
+          failed = true
+        end
         puts "  %+#{max_test_length}s  %-30s" % [ test, result ]
       end
     end
   end
 
+  exit(failed ? 1 : 0)
 end
