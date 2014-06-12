@@ -1,6 +1,7 @@
 #!/usr/bin/env rake
 require "bundler/gem_tasks"
-require "rainbow"
+require 'rainbow/ext/string'
+
 
 ## begin version management
 def valid? version
