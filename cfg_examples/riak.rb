@@ -32,11 +32,8 @@ project "Riak" do
   riak_ports.each do |name, num|
     socket num do
       open? do 
-        test "#{name} open?" do |r|
-          r
-        end
+        test "#{name} open?"
       end
     end
   end
 end
-

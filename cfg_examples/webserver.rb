@@ -24,6 +24,7 @@ project "Webserver Nginx" do
       end
     end
   end
+
   https do
     roles :app
     insecure true
@@ -53,4 +54,3 @@ project "Webserver Nginx" do
     open? { test "Port 9999 is open?" }
   end
 end
-
