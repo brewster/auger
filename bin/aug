@@ -15,7 +15,7 @@ require 'auger'
 ## set opts
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: aug [-h|--help] [-l|--list] [-v|--version] cfg"
+  opts.banner = "Usage: aug [-h|--help] [-l|--list] [-v|--verbose] [-V|--version] cfg"
 
   if ARGV[0] == nil
     puts opts.banner.color(:yellow)
@@ -27,7 +27,7 @@ OptionParser.new do |opts|
     exit
   end
 
-  opts.on('-v', '--version', 'Display version and exit.') do
+  opts.on('-V', '--version', 'Display version and exit.') do
     puts Auger::VERSION
     exit
   end
@@ -41,6 +41,14 @@ OptionParser.new do |opts|
 
   opts.on('-T', '--tunnel [USER@]HOST', 'Set a [user@]host to use as ssh tunnel.') do |t|
     options[:tunnel] = t
+  end
+
+  opts.on('-v', '--verbose', 'Display error backtraces.') do
+    options[:verbose] = true
+  end
+
+  opts.on('-s', '--single-thread', 'Do not fork when running tests.') do
+    options[:single_thread] = true
   end
 
 end.parse!
@@ -82,6 +90,16 @@ module Auger
   end
 end
 
+def runner(options)
+  if options[:single_thread]
+    yield
+  else
+    Process.fork do
+      yield
+    end
+  end
+end
+
 ## find cfg in path, or just use local file
 cfg = AUGER_CFG.map do |path|
   File.join(path, "#{ARGV[0]}.rb")
@@ -98,8 +116,7 @@ Auger::Config.load(cfg).projects.each do |project|
     pipes = project.connections(*server.roles).map do |connection|
       read, write = IO.pipe
 
-      Process.fork do
-        read.close              # child does not need
+      runner(options) do
         conn = connection.try_open(server)
 
         responses = connection.requests.map do |request|
