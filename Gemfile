@@ -10,4 +10,5 @@ gem 'net-ssh-gateway'
 
 group :development do
   gem 'gemcutter'
+  gem 'pry'
 end
