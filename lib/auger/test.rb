@@ -1,5 +1,5 @@
 module Auger
-  
+
   class Test
     attr_accessor :name, :block, :id
 
@@ -7,7 +7,7 @@ module Auger
       @name = name
       @block = block
     end
-    
+
     ## return Auger::Result object with outcome of test
     def run(response)
       outcome =

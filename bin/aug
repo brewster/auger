@@ -56,40 +56,6 @@ end.parse!
 ## load plugins
 Dir["#{File.dirname(File.dirname(__FILE__))}/lib/plugins/*.rb"].each { |file| require file }
 
-## pretty-print Result object
-module Auger
-  class Result
-
-    def format
-      output =
-        case self.outcome
-        when TrueClass  then "\u2713"
-        when MatchData  then outcome.captures.empty? ? "\u2713" : outcome.captures.join(' ')
-        when FalseClass then "\u2717"
-        when NilClass   then "nil"
-        when Exception  then "#{outcome.class}: #{outcome.to_s}"
-        else                 outcome.to_s
-        end
-
-      color =
-        case self.status
-        when FalseClass, NilClass then :red
-        when Exception            then :magenta
-        when Status               then
-          case self.status.value
-            when :ok        then :green
-            when :warn      then :yellow
-            when :exception then :magenta
-          else                   :red
-          end
-        else                           :green
-        end
-
-      return output.color(color)
-    end
-  end
-end
-
 def runner(options)
   if options[:single_thread]
     yield
